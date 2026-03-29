@@ -11,14 +11,23 @@ Power BI
 
 📅 Estructura
 Semana 1: Ingesta y calidad
+
 Semana 2: Wrangling
+
 Semana 3: EDA
+
 Semana 4: KPIs
+
 Semana 5: Estadística
+
 Semana 6: Publicación
+
 Semana 7: Proyecto
+
 Semana 8: Presentación
+
 🌐 GitHub Pages
 Este repo incluye un index.html para visualizar el curso.
+
 💡 “El análisis empieza con datos confiables.”
 
