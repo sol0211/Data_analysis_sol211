@@ -539,58 +539,48 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
         <li><div class="step-n">7</div><div><strong>Exportar evidencias:</strong> PDF con procedimiento completo + capturas + hallazgos + reflexión (1-2 páginas).</div></li>
       </ul>
     </div>
-    <div id="l1-python" class="lab-content">
-      <div class="code-block">
-    <span class="kw">import</span> pandas <span class="kw">as</span> pd
-    <span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
-    
-    <span class="cm"># 1. Ingesta: Cargar con encoding y tipos correctos (DNI como str)</span>
-    df = pd.<span class="fn">read_csv</span>(<span class="str">'atenciones_iren_centro.csv'</span>, encoding=<span class="str">'latin-1'</span>,
-                    parse_dates=[<span class="str">'fecha_atencion'</span>, <span class="str">'fecha_nacimiento'</span>],
-                    dtype={<span class="str">'dni_paciente'</span>:<span class="str">'str'</span>, <span class="str">'cie10_diagnostico'</span>:<span class="str">'str'</span>})
-    
-    <span class="cm"># 2. Perfilado inicial de calidad (Nulos)</span>
-    <span class="fn">print</span>(df.<span class="fn">info</span>())
-    nulos_pct = df.<span class="fn">isnull</span>().<span class="fn">sum</span>() / <span class="fn">len</span>(df) * 100
-    <span class="fn">print</span>(<span class="str">"Porcentaje de nulos por columna:"</span>)
-    <span class="fn">print</span>(nulos_pct[nulos_pct > 0].<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>))
-    
-    <span class="cm"># 3. Reporte automatizado de calidad (Data Profiling)</span>
-    profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Perfilado Calidad - IREN Centro"</span>, minimal=<span class="kw">True</span>)
-    profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad_oncologia.html"</span>)
-    
-    <span class="cm"># 4. Unicidad: Detección de duplicados por DNI y Fecha</span>
-    <span class="cm"># (Un paciente no debería tener dos atenciones oncológicas el mismo segundo)</span>
-    dupes = df.<span class="fn">duplicated</span>(subset=[<span class="str">'dni_paciente'</span>, <span class="str">'fecha_atencion'</span>]).<span class="fn">sum</span>()
-    <span class="fn">print</span>(<span class="str">f"Atenciones duplicadas detectadas: {dupes}"</span>)
-    
-    <span class="cm"># 5. Consistencia: Detección de Outliers en Edad</span>
-    <span class="cm"># Calculamos edad y buscamos valores biológicamente imposibles o extremos</span>
-    df[<span class="str">'edad'</span>] = (df[<span class="str">'fecha_atencion'</span>] - df[<span class="str">'fecha_nacimiento'</span>]).dt.days / 365.25
-    Q1 = df[<span class="str">'edad'</span>].<span class="fn">quantile</span>(0.25)
-    Q3 = df[<span class="str">'edad'</span>].<span class="fn">quantile</span>(0.75)
-    IQR = Q3 - Q1
-    outliers_edad = df[(df[<span class="str">'edad'</span>] &lt; 0) | (df[<span class="str">'edad'</span>] &gt; 110)]
-    <span class="fn">print</span>(<span class="str">f"Pacientes con edades inconsistentes: {len(outliers_edad)}"</span>)</div>
-    </div>
-    <div id="l1-pbi" class="lab-content">
-      <ul class="step-list">
-        <li><div class="step-n">1</div><div>Power Query: importar CSV y Excel. Revisar tipos detectados automáticamente. Corregir columnas de fecha y precio.</div></li>
-        <li><div class="step-n">2</div><div>Usar "Vista de calidad de columna" y "Vista de distribución" en Power Query para identificar nulos y valores atípicos visualmente.</div></li>
-        <li><div class="step-n">3</div><div>Crear columna calculada: % completitud por columna. Tarjetas: total filas / filas válidas / % completitud global.</div></li>
-        <li><div class="step-n">4</div><div>Histograma de precio_unitario para visualizar distribución y detectar valores imposibles (cero, negativos).</div></li>
-        <li><div class="step-n">5</div><div>Tabla resumen de anomalías: tipo de problema, columna afectada, cantidad de filas, impacto estimado en revenue.</div></li>
-      </ul>
-    </div>
-    <div id="l1-entregables" class="lab-content">
-      <ul class="step-list">
-        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema1_ApellidoNombre.pdf — procedimiento completo con capturas, análisis y reflexión (1-2 páginas).</div></li>
-        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> archivo .pbix con Power Query aplicado + capturas del perfil de calidad.</div></li>
-        <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook .ipynb ejecutado con ydata-profiling + celdas de análisis comentadas.</div></li>
-        <li><div class="step-n">📋</div><div><strong>Diccionario:</strong> Google Sheets o Excel con más de 10 campos + licencia + uso responsable declarado.</div></li>
-      </ul>
-    </div>
+     <div id="l1-python" class="lab-content">
+    <div class="code-block">
+  <span class="kw">import</span> pandas <span class="kw">as</span> pd
+  <span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
+  
+  <span class="cm"># 1. Ingesta: Carga con separador ";" y encoding "latin-1" según el notebook</span>
+  ruta = <span class="str">'Atenciones_Oncologicas_IREN_Centro_enero_julio_2024.csv'</span>
+  df = pd.<span class="fn">read_csv</span>(ruta, sep=<span class="str">';'</span>, encoding=<span class="str">'latin-1'</span>)
+  
+  <span class="cm"># 2. Tipado de datos: Fechas y Categorías</span>
+  df[<span class="str">'FECHA_ATENCION'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="str">'FECHA_ATENCION'</span>], format=<span class="str">'%d/%m/%Y'</span>)
+  df[<span class="str">'SEXO'</span>] = df[<span class="str">'SEXO'</span>].<span class="fn">astype</span>(<span class="str">'category'</span>)
+  
+  <span class="cm"># 3. Perfilado Automático (YData Profiling)</span>
+  profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Reporte Calidad - IREN Centro"</span>, minimal=<span class="kw">True</span>)
+  profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad.html"</span>)
+  
+  <span class="cm"># 4. Unicidad: Identificar duplicados parciales (Paciente + Fecha + Servicio)</span>
+  <span class="cm"># Un paciente no debería tener el mismo servicio en la misma fecha registrado dos veces</span>
+  cols_dupe = [<span class="str">'CODIGO_DOCUMENTO_PACIENTE'</span>, <span class="str">'FECHA_ATENCION'</span>, <span class="str">'DESCRIPCION_UPSS'</span>]
+  dupes = df.<span class="fn">duplicated</span>(subset=cols_dupe).<span class="fn">sum</span>()
+  <span class="fn">print</span>(<span class="str">f"Atenciones duplicadas detectadas: {dupes}"</span>)
+  
+  <span class="cm"># 5. Consistencia: Validación de EDAD vs AÑO_NACIMIENTO</span>
+  <span class="cm"># Verificamos si la edad declarada coincide con el año de atención</span>
+  df[<span class="str">'edad_calc'</span>] = df[<span class="str">'ANIO'</span>] - df[<span class="str">'ANIO_NACIMIENTO_PACIENTE'</span>]
+  inconsistentes = df[<span class="fn">abs</span>(df[<span class="str">'EDAD'</span>] - df[<span class="str">'edad_calc'</span>]) > <span class="num">1</span>]
+  <span class="fn">print</span>(<span class="str">f"Registros con edad inconsistente: {len(inconsistentes)}"</span>)
+  
+  <span class="cm"># 6. Detección de Outliers (Menores de 18 años en servicio de adultos)</span>
+  outliers_menores = df[df[<span class="str">'EDAD'</span>] < <span class="num">18</span>]
+  <span class="fn">print</span>(<span class="str">f"Posibles outliers (menores de edad): {len(outliers_menores)}"</span>)</div>
   </div>
+      <div id="l1-entregables" class="lab-content">
+        <ul class="step-list">
+          <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema1_ApellidoNombre.pdf — procedimiento completo con capturas, análisis y reflexión (1-2 páginas).</div></li>
+          <li><div class="step-n">📊</div><div><strong>Power BI:</strong> archivo .pbix con Power Query aplicado + capturas del perfil de calidad.</div></li>
+          <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook .ipynb ejecutado con ydata-profiling + celdas de análisis comentadas.</div></li>
+          <li><div class="step-n">📋</div><div><strong>Diccionario:</strong> Google Sheets o Excel con más de 10 campos + licencia + uso responsable declarado.</div></li>
+        </ul>
+      </div>
+    </div>
 
   <!-- Dataset -->
   <div class="dataset-card">
