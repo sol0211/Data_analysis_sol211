@@ -607,11 +607,28 @@ outliers = df[(df[<span class="str">'precio_unitario'</span>] &lt; Q1-1.5*IQR) |
   <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
   <div class="quiz-block">
     <div class="quiz-hdr">Tema 01 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
-    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Nulos:</strong> Al importar el CSV de ventas, el 28% de la columna precio_unitario es nulo. Al cruzar con la columna tipo_transaccion descubres que el 91% de esos nulos son devoluciones. ¿Qué mecanismo de ausencia es este (MCAR, MAR, MNAR)? ¿Qué estrategia de tratamiento aplicarías y cómo afecta al cálculo de revenue neto si eliminas esas filas?</div></div>
-    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Decisión de negocio:</strong> Encuentras 847 registros con precio_unitario = 0 (3.2% del total). Algunos corresponden a productos de cortesía del supermercado, otros parecen errores de captura. ¿Cómo distingues ambos casos? ¿Qué harías con cada grupo? Argumenta con criterio de negocio, no solo técnico.</div></div>
-    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Caso ético:</strong> Wong quiere usar los patrones de compra de sus clientes con tarjeta de fidelización para inferir si están embarazadas y enviarles ofertas de pañales antes de que lo anuncien. Desde tu rol como analista, ¿qué consideraciones éticas incluirías en el diccionario de datos? ¿Qué restricciones de uso declararías?</div></div>
+    
+    <div class="quiz-q">
+      <div class="qn">Q1</div>
+      <div class="qt">
+        <strong>Mecanismos de ausencia:</strong> Al importar el dataset de atenciones, notas que el 15% de la columna "Estadio_Cancer" es nulo. Al cruzar con la columna "Tipo_Servicio", descubres que el 98% de esos nulos corresponden a "Consultas Preventivas" donde aún no hay diagnóstico. ¿Qué mecanismo de ausencia es este? ¿Qué estrategia de tratamiento aplicarías para no sesgar los indicadores de severidad del hospital?
+      </div>
+    </div>
+  
+    <div class="quiz-q">
+      <div class="qn">Q2</div>
+      <div class="qt">
+        <strong>Perfilado y Consistencia:</strong> Encuentras 120 registros donde la "Fecha_Nacimiento" es posterior a la "Fecha_Atencion". Algunos son errores de digitación claros (año 2025), pero otros parecen ser inconsistencias en el sistema de citas. ¿Cómo distinguirías un error técnico de un error de proceso humano? ¿Qué impacto tendría en el cálculo del grupo etario prioritario para el MINSA si decides eliminar estos registros?
+      </div>
+    </div>
+  
+    <div class="quiz-q">
+      <div class="qn">Q3</div>
+      <div class="qt">
+        <strong>Caso Ético y Privacidad:</strong> El IREN Centro desea compartir el dataset con una farmacéutica externa para "predecir la deserción al tratamiento" usando el DNI y la ubicación exacta del paciente. Desde tu rol como analista, ¿qué consideraciones éticas de anonimización incluirías en el diccionario de datos? ¿Qué restricciones de uso responsable declararías bajo la Ley de Protección de Datos Personales?
+      </div>
+    </div>
   </div>
-</div>
 
 <!-- ═══════════════════ TEMA 2 ═══════════════════ -->
 <div class="week-panel" id="panel-2">
