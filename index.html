@@ -3,115 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Datos - Portafolio</title>
+    <title>Análisis de Datos 2026-01</title>
     <style>
-        :root { --accent: #00ff88; }
-        body { 
-            background-color: #0d1117; 
-            font-family: 'Segoe UI', sans-serif; 
-            color: #e6edf3; 
-            margin: 0; 
+        :root { --accent: #ff4d4d; --bg: #0d1117; }
+        body { background: var(--bg); color: #e8e8f0; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px 0; }
+        .container { max-width: 650px; width: 90%; }
+        .card-label { color: var(--accent); font-weight: bold; letter-spacing: 2px; font-size: 12px; margin-bottom: 10px; }
+        h1 { font-size: 2.2rem; margin: 0 0 10px 0; }
+        .subtitle { color: #8b949e; margin-bottom: 40px; }
+        .menu-grid { display: grid; gap: 12px; }
+        .btn-week { 
+            background: #161b22; border: 1px solid #30363d; color: white; 
+            padding: 20px 25px; border-radius: 12px; text-decoration: none; 
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.2s ease;
         }
-        .menu-container { max-width: 800px; margin: 50px auto; padding: 20px; }
-        .card-label { 
-            color: var(--accent); 
-            text-transform: uppercase; 
-            font-size: 12px; 
-            font-weight: bold; 
-            letter-spacing: 1px;
-        }
-        h1 { margin-top: 10px; font-size: 2rem; }
-        .week-card { 
-            background: #161b22; 
-            border: 1px solid #30363d; 
-            border-radius: 12px; 
-            padding: 25px; 
-            margin-bottom: 15px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .week-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-        .week-info h3 { margin: 0; color: #fff; font-size: 1.1rem; }
-        .week-info p { margin: 5px 0 0; color: #8b949e; font-size: 0.9rem; }
-        .btn-open { 
-            background: var(--accent); 
-            color: #000; 
-            padding: 10px 20px; 
-            border-radius: 6px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 0.85rem;
-        }
-        .btn-open:hover { brightness: 1.1; }
+        .btn-week:hover { border-color: var(--accent); background: #1c2128; transform: translateX(8px); }
+        .btn-week span { color: var(--accent); font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
-    <div class="menu-container">
-        <div class="card-label">Repositorio de Laboratorios</div>
-        <h1>Análisis de Datos - Ciclo 2026-01</h1>
-        <br>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 01: Calidad de Datos</h3>
-                <p>Caso IREN Centro: Ingesta, perfilado y tratamiento de nulos/outliers.</p>
-            </div>
-            <a href="semana1/index.html" class="btn-open">Ver Sesión</a>
+    <div class="container">
+        <div class="card-label">PORTAFOLIO ACADÉMICO</div>
+        <h1>Análisis de Datos 2026-01</h1>
+        <p class="subtitle">Selecciona una sesión para revisar el laboratorio y materiales.</p>
+        
+        <div class="menu-grid">
+            <a href="semana1/index.html" class="btn-week">Semana 01: Ingesta y Calidad de Datos <span>→</span></a>
+            <a href="semana2/index.html" class="btn-week">Semana 02: Data Wranglig <span>→</span></a>
+            <a href="semana3/index.html" class="btn-week">Semana 03: Análisis Estadístico Descriptivo <span>→</span></a>
+            <a href="semana4/index.html" class="btn-week">Semana 04: KPI's temporales <span>→</span></a>
+            <a href="semana5/index.html" class="btn-week">Semana 05: Estadística Decisional <span>→</span></a>
+            <a href="semana6/index.html" class="btn-week">Semana 06: Publicación y seguridad <span>→</span></a>
+            <a href="semana7/index.html" class="btn-week">Semana 07: Proyecto MVP <span>→</span></a>
         </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 02: Visualización y Storytelling</h3>
-                <p>Diseño de dashboards efectivos y comunicación de hallazgos.</p>
-            </div>
-            <a href="semana2/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 03: Transformación de Datos</h3>
-                <p>Ingeniería de variables, escalado y normalización.</p>
-            </div>
-            <a href="semana3/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 04: Análisis Exploratorio (EDA)</h3>
-                <p>Detección de correlaciones y patrones en datasets complejos.</p>
-            </div>
-            <a href="semana4/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 05: Estadística Inferencial</h3>
-                <p>Pruebas de hipótesis y distribuciones de probabilidad.</p>
-            </div>
-            <a href="semana5/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 06: Modelos de Regresión</h3>
-                <p>Predicción de valores continuos y evaluación de métricas.</p>
-            </div>
-            <a href="semana6/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
-        <div class="week-card">
-            <div class="week-info">
-                <h3>Semana 07: Modelos de Clasificación</h3>
-                <p>Algoritmos de decisión para problemas categóricos.</p>
-            </div>
-            <a href="semana7/index.html" class="btn-open">Ver Sesión</a>
-        </div>
-
     </div>
 </body>
 </html>
