@@ -608,28 +608,28 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   </div>
 
   <!-- Quiz -->
-  <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
+   <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
   <div class="quiz-block">
     <div class="quiz-hdr">Tema 01 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
     
     <div class="quiz-q">
       <div class="qn">Q1</div>
       <div class="qt">
-        <strong>Mecanismos de ausencia:</strong> Al importar el dataset de atenciones, notas que el 15% de la columna "Estadio_Cancer" es nulo. Al cruzar con la columna "Tipo_Servicio", descubres que el 98% de esos nulos corresponden a "Consultas Preventivas" donde aún no hay diagnóstico. ¿Qué mecanismo de ausencia es este? ¿Qué estrategia de tratamiento aplicarías para no sesgar los indicadores de severidad del hospital?
+        <strong>Mecanismos de ausencia:</strong> En el notebook, la columna <code>monto_prestacion</code> presenta nulos. Tras el perfilado, descubres que la mayoría corresponden a pacientes con "Seguro Integral de Salud (SIS)". ¿Qué tipo de mecanismo de ausencia (MCAR, MAR o MNAR) representa este hallazgo y qué estrategia de imputación usarías para no distorsionar el costo promedio de atención?
       </div>
     </div>
   
     <div class="quiz-q">
       <div class="qn">Q2</div>
       <div class="qt">
-        <strong>Perfilado y Consistencia:</strong> Encuentras 120 registros donde la "Fecha_Nacimiento" es posterior a la "Fecha_Atencion". Algunos son errores de digitación claros (año 2025), pero otros parecen ser inconsistencias en el sistema de citas. ¿Cómo distinguirías un error técnico de un error de proceso humano? ¿Qué impacto tendría en el cálculo del grupo etario prioritario para el MINSA si decides eliminar estos registros?
+        <strong>Perfilado de Consistencia:</strong> Al calcular la edad de los pacientes, el histograma muestra valores atípicos (outliers) como -5 y 125 años. ¿Cómo impacta esto en el cálculo de la media poblacional? Según el código desarrollado, ¿por qué es preferible filtrar estos rangos antes de entregar el diccionario de datos al MINSA?
       </div>
     </div>
   
     <div class="quiz-q">
       <div class="qn">Q3</div>
       <div class="qt">
-        <strong>Caso Ético y Privacidad:</strong> El IREN Centro desea compartir el dataset con una farmacéutica externa para "predecir la deserción al tratamiento" usando el DNI y la ubicación exacta del paciente. Desde tu rol como analista, ¿qué consideraciones éticas de anonimización incluirías en el diccionario de datos? ¿Qué restricciones de uso responsable declararías bajo la Ley de Protección de Datos Personales?
+        <strong>Unicidad y Procesos:</strong> Durante el laboratorio identificamos que el dataset tiene registros duplicados exactos (ID de atención repetido). Si el IREN Centro usa este reporte para solicitar presupuesto por paciente atendido, ¿cuál es el riesgo ético y financiero de no eliminar estos duplicados en la etapa de pre-procesamiento?
       </div>
     </div>
   </div>
