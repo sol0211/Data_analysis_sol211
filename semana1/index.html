@@ -540,34 +540,38 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
       </ul>
     </div>
     <div id="l1-python" class="lab-content">
-<div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
-<span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
-
-<span class="cm"># 1. Cargar con encoding correcto</span>
-df = pd.<span class="fn">read_csv</span>(<span class="str">'ventas_wong.csv'</span>, encoding=<span class="str">'latin-1'</span>,
-                parse_dates=[<span class="str">'fecha_venta'</span>],
-                dtype={<span class="str">'codigo_producto'</span>:<span class="str">'str'</span>})
-
-<span class="cm"># 2. Diagnóstico inicial</span>
-<span class="fn">print</span>(df.<span class="fn">info</span>())
-nulos = df.<span class="fn">isnull</span>().<span class="fn">sum</span>() / <span class="fn">len</span>(df) * 100
-<span class="fn">print</span>(nulos[nulos > 0].<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>))
-
-<span class="cm"># 3. Perfil automático de calidad</span>
-profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Reporte Calidad T1"</span>, minimal=<span class="kw">True</span>)
-profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad_T1.html"</span>)
-
-<span class="cm"># 4. Detección de duplicados</span>
-dupes = df.<span class="fn">duplicated</span>(subset=[<span class="str">'id_transaccion'</span>]).<span class="fn">sum</span>()
-<span class="fn">print</span>(<span class="str">f"Duplicados: {dupes}"</span>)
-
-<span class="cm"># 5. Outliers por IQR en precio_unitario</span>
-Q1 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.25)
-Q3 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.75)
-IQR = Q3 - Q1
-outliers = df[(df[<span class="str">'precio_unitario'</span>] &lt; Q1-1.5*IQR) |
-              (df[<span class="str">'precio_unitario'</span>] &gt; Q3+1.5*IQR)]
-<span class="fn">print</span>(<span class="str">f"Outliers detectados: {len(outliers)}"</span>)</div>
+      <div class="code-block">
+    <span class="kw">import</span> pandas <span class="kw">as</span> pd
+    <span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
+    
+    <span class="cm"># 1. Ingesta: Cargar con encoding y tipos correctos (DNI como str)</span>
+    df = pd.<span class="fn">read_csv</span>(<span class="str">'atenciones_iren_centro.csv'</span>, encoding=<span class="str">'latin-1'</span>,
+                    parse_dates=[<span class="str">'fecha_atencion'</span>, <span class="str">'fecha_nacimiento'</span>],
+                    dtype={<span class="str">'dni_paciente'</span>:<span class="str">'str'</span>, <span class="str">'cie10_diagnostico'</span>:<span class="str">'str'</span>})
+    
+    <span class="cm"># 2. Perfilado inicial de calidad (Nulos)</span>
+    <span class="fn">print</span>(df.<span class="fn">info</span>())
+    nulos_pct = df.<span class="fn">isnull</span>().<span class="fn">sum</span>() / <span class="fn">len</span>(df) * 100
+    <span class="fn">print</span>(<span class="str">"Porcentaje de nulos por columna:"</span>)
+    <span class="fn">print</span>(nulos_pct[nulos_pct > 0].<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>))
+    
+    <span class="cm"># 3. Reporte automatizado de calidad (Data Profiling)</span>
+    profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Perfilado Calidad - IREN Centro"</span>, minimal=<span class="kw">True</span>)
+    profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad_oncologia.html"</span>)
+    
+    <span class="cm"># 4. Unicidad: Detección de duplicados por DNI y Fecha</span>
+    <span class="cm"># (Un paciente no debería tener dos atenciones oncológicas el mismo segundo)</span>
+    dupes = df.<span class="fn">duplicated</span>(subset=[<span class="str">'dni_paciente'</span>, <span class="str">'fecha_atencion'</span>]).<span class="fn">sum</span>()
+    <span class="fn">print</span>(<span class="str">f"Atenciones duplicadas detectadas: {dupes}"</span>)
+    
+    <span class="cm"># 5. Consistencia: Detección de Outliers en Edad</span>
+    <span class="cm"># Calculamos edad y buscamos valores biológicamente imposibles o extremos</span>
+    df[<span class="str">'edad'</span>] = (df[<span class="str">'fecha_atencion'</span>] - df[<span class="str">'fecha_nacimiento'</span>]).dt.days / 365.25
+    Q1 = df[<span class="str">'edad'</span>].<span class="fn">quantile</span>(0.25)
+    Q3 = df[<span class="str">'edad'</span>].<span class="fn">quantile</span>(0.75)
+    IQR = Q3 - Q1
+    outliers_edad = df[(df[<span class="str">'edad'</span>] &lt; 0) | (df[<span class="str">'edad'</span>] &gt; 110)]
+    <span class="fn">print</span>(<span class="str">f"Pacientes con edades inconsistentes: {len(outliers_edad)}"</span>)</div>
     </div>
     <div id="l1-pbi" class="lab-content">
       <ul class="step-list">
