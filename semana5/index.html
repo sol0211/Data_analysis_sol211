@@ -357,11 +357,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
 <nav class="topnav">
   <div class="nav-brand">ANÁLISIS DE <span>DATOS</span></div>
   <div class="nav-links" id="navLinks">
-    <a class="nav-link active" onclick="showWeek(1)" href="#">T1</a>
+    <a class="nav-link" onclick="showWeek(1)" href="#">T1</a>
     <a class="nav-link" onclick="showWeek(2)" href="#">T2</a>
     <a class="nav-link" onclick="showWeek(3)" href="#">T3</a>
     <a class="nav-link" onclick="showWeek(4)" href="#">T4</a>
-    <a class="nav-link" onclick="showWeek(5)" href="#">T5</a>
+    <a class="nav-link active" onclick="showWeek(5)" href="#">T5</a>
     <a class="nav-link" onclick="showWeek(6)" href="#">T6</a>
     <a class="nav-link" onclick="showWeek(7)" href="#">T7</a>
   </div>
@@ -391,7 +391,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
 
 <!-- WEEK PILLS NAV -->
 <div class="weeks-nav">
-  <div class="week-pill active" onclick="showWeek(1)" id="pill-1">
+  <div class="week-pill" onclick="showWeek(1)" id="pill-1">
     <div class="wn">TEMA 01</div><div class="wt">Ingesta y calidad</div>
   </div>
   <div class="week-pill" onclick="showWeek(2)" id="pill-2">
@@ -403,7 +403,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   <div class="week-pill" onclick="showWeek(4)" id="pill-4">
     <div class="wn">TEMA 04</div><div class="wt">KPIs temporal</div>
   </div>
-  <div class="week-pill" onclick="showWeek(5)" id="pill-5">
+  <div class="week-pill active" onclick="showWeek(5)" id="pill-5">
     <div class="wn">TEMA 05</div><div class="wt">Estadística decisional</div>
   </div>
   <div class="week-pill" onclick="showWeek(6)" id="pill-6">
@@ -418,7 +418,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
 <div class="course-body">
 
 <!-- ═══════════════════ TEMA 1 ═══════════════════ -->
-<div class="week-panel active" id="panel-1">
+<div class="week-panel" id="panel-1">
   <div class="wk-header">
     <div class="wk-num-badge" style="background:rgba(255,77,77,.12);color:var(--accent)">01</div>
     <div class="wk-info">
@@ -1109,7 +1109,7 @@ corr = df[[<span class="str">'edad'</span>,<span class="str">'dias_espera'</span
 </div>
 
 <!-- ═══════════════════ TEMA 5 ═══════════════════ -->
-<div class="week-panel" id="panel-5">
+<div class="week-panel active" id="panel-5">
   <div class="wk-header">
     <div class="wk-num-badge" style="background:rgba(255,77,180,.12);color:#f472b6">05</div>
     <div class="wk-info">
@@ -1590,7 +1590,22 @@ function showWeek(n) {
   document.getElementById('pill-' + n).classList.add('active');
   document.querySelectorAll('.nav-link')[n-1].classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
+  // Update URL without reload so bookmarks/links reflect current week
+  const url = new URL(window.location.href);
+  url.searchParams.set('week', n);
+  history.replaceState(null, '', url.toString());
 }
+
+// On load: read ?week=N from URL and activate that panel
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const w = parseInt(params.get('week'));
+  if (w >= 1 && w <= 7) {
+    document.addEventListener('DOMContentLoaded', function() {
+      showWeek(w);
+    });
+  }
+})();
 
 function switchTab(el, labId, tabName) {
   const wrap = el.closest('.lab-wrap');
