@@ -3,81 +3,1529 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semana 1 — Calidad de Datos</title>
+<title>Análisis de Datos — Curso Completo | Solange Basualdo</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ── ESTILOS ORIGINALES INTEGRADOS ── */
 :root {
-  --bg: #0a0a0f; --surface: #12121a; --surface2: #1a1a26; --surface3: #202030;
-  --accent: #ff4d4d; --accent2: #ffb347; --accent3: #4dffb3; --info: #4da6ff;
-  --text: #e8e8f0; --muted: #7878a0; --border: #2a2a3a; --border2: #3a3a52;
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --surface3: #202030;
+  --accent: #ff4d4d;
+  --accent2: #ffb347;
+  --accent3: #4dffb3;
+  --info: #4da6ff;
+  --text: #e8e8f0;
+  --muted: #7878a0;
+  --border: #2a2a3a;
+  --border2: #3a3a52;
 }
-body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 40px; }
-.back-btn { display: inline-block; margin-bottom: 25px; color: var(--accent); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; }
-.wk-header { display: flex; align-items: flex-start; gap: 20px; padding-bottom: 28px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
-.wk-num-badge { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 1.1rem; width: 54px; height: 54px; border-radius: 14px; background:rgba(255,77,77,.12); color:var(--accent); display: flex; align-items: center; justify-content: center; }
-.wk-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; margin-bottom: 8px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
-.lab-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 20px; }
-.lab-hdr { padding: 14px 18px; background: rgba(77,255,179,.04); border-bottom: 1px solid var(--border); }
-.lab-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface2); }
-.lab-tab { padding: 10px 18px; cursor: pointer; color: var(--muted); font-size: 0.7rem; font-family: 'IBM Plex Mono'; }
-.lab-tab.active { color: var(--accent3); border-bottom: 2px solid var(--accent3); }
-.lab-content { display: none; padding: 20px; }
-.lab-content.active { display: block; }
-.code-block { background:#05050a; border: 1px solid var(--border); border-radius: 8px; padding: 15px; font-family: 'IBM Plex Mono'; font-size: 0.75rem; color: #a78bfa; overflow-x: auto; white-space: pre; }
-.quiz-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.quiz-hdr { padding: 12px; background: var(--surface3); font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; }
-.quiz-q { padding: 15px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; font-size: 0.85rem; }
-.qn { color: var(--accent); font-family: 'IBM Plex Mono'; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+
+/* ── NAV ── */
+.topnav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(10,10,15,0.94);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 56px;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;}
+.nav-brand span{color:var(--accent);}
+.nav-links{display:flex;gap:6px;}
+.nav-link{
+  padding:5px 12px;border-radius:6px;
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:1.5px;
+  color:var(--muted);cursor:pointer;border:1px solid transparent;
+  transition:all .2s;text-decoration:none;
+}
+.nav-link:hover{color:var(--text);border-color:var(--border);}
+.nav-link.active{color:var(--accent);border-color:rgba(255,77,77,.25);background:rgba(255,77,77,.06);}
+
+/* ── HERO ── */
+.hero{
+  position:relative;padding:80px 56px 64px;
+  max-width:1200px;margin:0 auto;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;top:-120px;right:-100px;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(255,77,77,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-glow2{
+  position:absolute;bottom:-60px;left:-80px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(77,255,179,.04) 0%,transparent 65%);
+  pointer-events:none;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;
+}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.05;margin-bottom:16px;
+}
+.hero h1 em{font-style:normal;color:var(--accent);}
+.hero-sub{font-size:1rem;color:var(--muted);font-weight:300;max-width:560px;margin-bottom:36px;}
+.author-row{display:flex;align-items:center;gap:12px;margin-bottom:48px;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:#fff;flex-shrink:0;
+}
+.author-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;}
+.author-role{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted);}
+
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  padding-top:32px;border-top:1px solid var(--border);
+}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;line-height:1;margin-bottom:4px;}
+.stat-label{font-size:.75rem;color:var(--muted);}
+
+/* ── WEEK GRID ── */
+.weeks-nav{
+  max-width:1200px;margin:0 auto;
+  padding:48px 56px 0;
+  display:grid;grid-template-columns:repeat(7,1fr);gap:8px;
+}
+.week-pill{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:12px 10px;
+  text-align:center;cursor:pointer;transition:all .2s;
+}
+.week-pill:hover{border-color:var(--border2);background:var(--surface2);}
+.week-pill.active{border-color:var(--accent);background:rgba(255,77,77,.07);}
+.week-pill .wn{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:1.5px;margin-bottom:4px;}
+.week-pill .wt{font-size:.72rem;font-weight:600;color:var(--text);line-height:1.3;}
+.week-pill.active .wt{color:var(--accent);}
+
+/* ── CONTENT AREA ── */
+.course-body{max-width:1200px;margin:0 auto;padding:40px 56px 100px;}
+
+.week-panel{display:none;}
+.week-panel.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── WEEK HEADER ── */
+.wk-header{
+  display:flex;align-items:flex-start;gap:20px;
+  padding-bottom:28px;border-bottom:1px solid var(--border);margin-bottom:32px;
+}
+.wk-num-badge{
+  font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:1.1rem;
+  width:54px;height:54px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.wk-info{flex:1;}
+.wk-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.wk-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;line-height:1.1;margin-bottom:8px;}
+.wk-desc{font-size:.9rem;color:var(--muted);max-width:640px;line-height:1.6;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tag{
+  padding:3px 10px;border-radius:4px;
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.5px;
+  border:1px solid var(--border);color:var(--muted);background:var(--surface);
+}
+
+/* ── GRID LAYOUTS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:20px 22px;transition:border-color .2s;
+}
+.card:hover{border-color:var(--border2);}
+.card-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:8px;}
+.card p{font-size:.85rem;color:var(--muted);line-height:1.65;}
+.card ul{list-style:none;}
+.card ul li{
+  font-size:.83rem;color:var(--muted);padding:4px 0 4px 16px;
+  position:relative;line-height:1.5;border-bottom:1px solid var(--border);
+}
+.card ul li:last-child{border-bottom:none;}
+.card ul li::before{content:'→';position:absolute;left:0;color:var(--border2);font-size:.7rem;}
+.card ul li strong{color:var(--text);}
+
+/* ── CASE CARD ── */
+.case-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;margin-bottom:16px;
+}
+.case-top{
+  padding:18px 22px 14px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:14px;
+}
+.case-icon{
+  width:42px;height:42px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+}
+.ci-red{background:rgba(255,77,77,.12);}
+.ci-amber{background:rgba(255,179,71,.12);}
+.ci-green{background:rgba(77,255,179,.12);}
+.ci-blue{background:rgba(77,166,255,.12);}
+.ci-pink{background:rgba(255,77,180,.12);}
+.ci-purple{background:rgba(150,77,255,.12);}
+.ci-teal{background:rgba(77,220,255,.12);}
+.case-co{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.case-ti{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;line-height:1.25;}
+.case-body{padding:18px 22px;}
+.case-body p{font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:10px;}
+.case-body p:last-child{margin-bottom:0;}
+.case-lesson{
+  background:var(--surface2);border-radius:8px;
+  padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-top:8px;
+}
+.lesson-icon{font-size:.85rem;flex-shrink:0;margin-top:2px;}
+.lesson-text{font-size:.82rem;color:var(--text);line-height:1.55;}
+.lesson-text strong{color:var(--accent2);}
+
+/* ── HIGHLIGHT ── */
+.hl{
+  border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+  background:var(--surface);padding:14px 18px;margin:14px 0;
+  font-size:.88rem;color:var(--text);line-height:1.65;
+}
+.hl.green{border-left-color:var(--accent3);}
+.hl.amber{border-left-color:var(--accent2);}
+.hl.blue{border-left-color:var(--info);}
+
+/* ── FLOW STEPS ── */
+.flow-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-bottom:16px;}
+.flow-step{
+  background:var(--surface);padding:18px 20px;
+  border:1px solid var(--border);border-right:none;
+}
+.flow-step:first-child{border-radius:10px 0 0 10px;}
+.flow-step:last-child{border-right:1px solid var(--border);border-radius:0 10px 10px 0;}
+.flow-tag{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:1px;margin-bottom:8px;
+}
+.ft-hook{background:rgba(255,77,77,.12);color:var(--accent);}
+.ft-dev{background:rgba(77,166,255,.12);color:var(--info);}
+.ft-close{background:rgba(77,255,179,.12);color:var(--accent3);}
+.flow-step-num{font-family:'IBM Plex Mono',monospace;font-size:1.4rem;color:var(--border2);margin-bottom:6px;font-weight:500;}
+.flow-step h5{font-size:.88rem;font-weight:600;margin-bottom:6px;}
+.flow-step p{font-size:.8rem;color:var(--muted);line-height:1.55;}
+
+/* ── DATASET CARD ── */
+.dataset-card{
+  background:var(--surface);border:1px solid rgba(77,255,179,.2);
+  border-left:3px solid var(--accent3);border-radius:0 12px 12px 0;
+  padding:18px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;
+  margin-bottom:16px;
+}
+.dataset-card .card-label{margin-bottom:6px;}
+.dataset-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:5px;}
+.dataset-card p{font-size:.8rem;color:var(--muted);line-height:1.55;}
+.dataset-card a{
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;
+  color:var(--accent3);text-decoration:none;display:block;margin-top:6px;
+}
+.dataset-card a:hover{text-decoration:underline;}
+
+/* ── ERROR BANNER ── */
+.err-banner{
+  background:rgba(255,77,77,.06);border:1px solid rgba(255,77,77,.18);
+  border-radius:10px;padding:13px 16px;display:flex;gap:10px;
+  margin-bottom:14px;align-items:flex-start;
+}
+.err-icon{font-size:.9rem;flex-shrink:0;margin-top:2px;}
+.err-text{font-size:.84rem;color:#fca5a5;line-height:1.55;}
+.err-text strong{color:var(--accent);}
+
+/* ── QUIZ ── */
+.quiz-block{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;margin:14px 0;
+}
+.quiz-hdr{
+  padding:12px 18px;background:var(--surface3);border-bottom:1px solid var(--border);
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+}
+.quiz-q{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;gap:12px;}
+.quiz-q:last-child{border-bottom:none;}
+.qn{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--accent);min-width:18px;padding-top:2px;}
+.qt{font-size:.85rem;color:var(--muted);line-height:1.65;}
+.qt strong{color:var(--text);}
+
+/* ── RESOURCES ── */
+.res-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px;}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:border-color .2s;}
+.res-card:hover{border-color:rgba(255,77,77,.25);}
+.res-type{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.rt-pod{color:var(--accent);}
+.rt-yt{color:#ff4444;}
+.rt-gh{color:var(--accent3);}
+.res-card h5{font-size:.85rem;font-weight:600;margin-bottom:5px;line-height:1.3;}
+.res-card a{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--info);text-decoration:none;display:block;margin-bottom:7px;word-break:break-all;}
+.res-card a:hover{text-decoration:underline;}
+.res-use{font-size:.77rem;color:var(--muted);line-height:1.4;}
+
+/* ── CODE BLOCK ── */
+.code-block{
+  background:#05050a;border:1px solid var(--border);
+  border-radius:8px;padding:14px 16px;
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:#a78bfa;
+  line-height:1.7;overflow-x:auto;margin:10px 0;white-space:pre;
+}
+.kw{color:#38bdf8;}.fn{color:#34d399;}.str{color:#fbbf24;}.cm{color:#3a3a5a;}
+
+/* ── LAB BLOCK ── */
+.lab-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.lab-hdr{
+  padding:14px 18px;background:rgba(77,255,179,.04);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.lab-badge{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:600;
+  background:rgba(77,255,179,.1);color:var(--accent3);border:1px solid rgba(77,255,179,.25);
+}
+.lab-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-left:10px;}
+.lab-tool{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--muted);}
+.lab-tabs{display:flex;border-bottom:1px solid var(--border);}
+.lab-tab{
+  padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
+}
+.lab-tab:hover{color:var(--text2);}
+.lab-tab.active{color:var(--accent3);border-bottom-color:var(--accent3);}
+.lab-content{display:none;padding:18px;}
+.lab-content.active{display:block;}
+.step-list{list-style:none;}
+.step-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--muted);line-height:1.5;}
+.step-list li:last-child{border-bottom:none;}
+.step-n{
+  width:22px;height:22px;border-radius:6px;background:rgba(77,255,179,.1);
+  color:var(--accent3);font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-list li strong{color:var(--text);}
+
+/* ── RUBRIC ── */
+.rubric-table{width:100%;border-collapse:collapse;font-size:.83rem;margin:14px 0;}
+.rubric-table th{
+  text-align:left;padding:9px 12px;
+  background:var(--surface3);color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;
+  border-bottom:1px solid var(--border);border-top:1px solid var(--border);
+}
+.rubric-table th:first-child{border-left:1px solid var(--border);border-radius:8px 0 0 0;}
+.rubric-table th:last-child{border-right:1px solid var(--border);border-radius:0 8px 0 0;}
+.rubric-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+.rubric-table td:first-child{color:var(--text);font-weight:500;border-left:1px solid var(--border);}
+.rubric-table td:last-child{border-right:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--accent2);}
+.rubric-table tr:last-child td:first-child{border-radius:0 0 0 8px;}
+.rubric-table tr:last-child td:last-child{border-radius:0 0 8px 0;}
+
+/* ── SECTION LABEL ── */
+.sec-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:3px;
+  text-transform:uppercase;color:var(--accent);
+  margin:28px 0 12px;display:flex;align-items:center;gap:10px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .topnav,.hero,.weeks-nav,.course-body{padding-left:20px;padding-right:20px;}
+  .two-col,.three-col,.flow-row,.res-grid,.stats-row,.dataset-card{grid-template-columns:1fr;}
+  .weeks-nav{grid-template-columns:repeat(4,1fr);}
+}
 </style>
 </head>
 <body>
 
-<a href="../index.html" class="back-btn">← VOLVER AL MENÚ PRINCIPAL</a>
-
-<div class="wk-header">
-  <div class="wk-num-badge">01</div>
-  <div class="wk-info">
-    <div style="font-family:'IBM Plex Mono'; color:var(--muted); font-size:0.6rem; letter-spacing:2px; margin-bottom:5px;">TEMA 01 · PREPARACIÓN DE DATOS</div>
-    <div class="wk-title">Ingesta y calidad de datos</div>
-    <p style="color:var(--muted); font-size:0.9rem;">El dato que llega roto arruina todo lo que viene después. Aprende a diagnosticar, no solo a limpiar.</p>
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-brand">ANÁLISIS DE <span>DATOS</span></div>
+  <div class="nav-links" id="navLinks">
+    <a class="nav-link active" onclick="showWeek(1)" href="#">T1</a>
+    <a class="nav-link" onclick="showWeek(2)" href="#">T2</a>
+    <a class="nav-link" onclick="showWeek(3)" href="#">T3</a>
+    <a class="nav-link" onclick="showWeek(4)" href="#">T4</a>
+    <a class="nav-link" onclick="showWeek(5)" href="#">T5</a>
+    <a class="nav-link" onclick="showWeek(6)" href="#">T6</a>
+    <a class="nav-link" onclick="showWeek(7)" href="#">T7</a>
   </div>
-</div>
+</nav>
 
-<div class="card" style="border-left: 3px solid var(--accent);">
-  <h4 style="font-family:'Syne'; margin-bottom:10px;">Logro del tema</h4>
-  <p style="font-size:0.85rem; color:var(--muted);">Identifica procesos de ingesta, perfilado y control de calidad para asegurar el uso adecuado del dato en el análisis.</p>
-</div>
-
-<div class="lab-wrap">
-  <div class="lab-hdr"><span style="color:var(--accent3); font-family:'IBM Plex Mono'; font-size:0.6rem;">● LAB T1</span><span style="font-family:'Syne'; margin-left:10px; font-weight:700;">Ingesta, perfilado y limpieza básica</span></div>
-  <div class="lab-tabs">
-    <div class="lab-tab active" onclick="switchTab(this,'l1','python')">PYTHON</div>
-    <div class="lab-tab" onclick="switchTab(this,'l1','quiz')">EVALUACIÓN</div>
-  </div>
-  
-  <div id="l1-python" class="lab-content active">
-    <div class="code-block">
-import pandas as pd
-df = pd.read_csv('iren_centro_2024.csv', sep=';', encoding='latin-1')
-# Perfilado de nulos
-print(df.isnull().sum())
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="eyebrow">UAIN1008R · UPN · 2026-1</div>
+  <h1>Análisis de <em>Datos</em><br>— 7 temas completos</h1>
+  <p class="hero-sub">Casos de negocio reales, laboratorios aplicados y decisiones basadas en datos. De la ingesta al MVP analítico.</p>
+  <div class="author-row">
+    <div class="avatar">SB</div>
+    <div>
+      <div class="author-name">Solange Basualdo</div>
+      <div class="author-role">Docente · Análisis de Datos · UPN</div>
     </div>
   </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent)">7</div><div class="stat-label">temas del curso</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent3)">7</div><div class="stat-label">laboratorios reales</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">3</div><div class="stat-label">herramientas: SQL · Python · Power BI</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--info)">MVP</div><div class="stat-label">proyecto final integrador</div></div>
+  </div>
+</section>
 
-  <div id="l1-quiz" class="lab-content">
-    <div class="quiz-block">
-      <div class="quiz-hdr">CUESTIONARIO TEMA 1</div>
-      <div class="quiz-q">
-        <div class="qn">Q1</div>
-        <div><strong>Tratamiento de nulos:</strong> ¿Qué estrategia aplicarías para los montos nulos del SIS?</div>
+<!-- WEEK PILLS NAV -->
+<div class="weeks-nav">
+  <div class="week-pill active" onclick="showWeek(1)" id="pill-1">
+    <div class="wn">TEMA 01</div><div class="wt">Ingesta y calidad</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(2)" id="pill-2">
+    <div class="wn">TEMA 02</div><div class="wt">Wrangling</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(3)" id="pill-3">
+    <div class="wn">TEMA 03</div><div class="wt">EDA estadística</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(4)" id="pill-4">
+    <div class="wn">TEMA 04</div><div class="wt">KPIs temporal</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(5)" id="pill-5">
+    <div class="wn">TEMA 05</div><div class="wt">Estadística decisional</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(6)" id="pill-6">
+    <div class="wn">TEMA 06</div><div class="wt">Publicación y seguridad</div>
+  </div>
+  <div class="week-pill" onclick="showWeek(7)" id="pill-7">
+    <div class="wn">TEMA 07</div><div class="wt">Proyecto MVP</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="course-body">
+
+<!-- ═══════════════════ TEMA 1 ═══════════════════ -->
+<div class="week-panel active" id="panel-1">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(255,77,77,.12);color:var(--accent)">01</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 01 · Preparación de datos</div>
+      <div class="wk-title">Ingesta y calidad de datos</div>
+      <div class="wk-desc">El dato que llega roto arruina todo lo que viene después. Aprende a diagnosticar, no solo a limpiar.</div>
+      <div class="tag-row">
+        <span class="tag">CSV · Excel · JSON</span>
+        <span class="tag">Perfilado</span>
+        <span class="tag">Nulos · Duplicados · Outliers</span>
+        <span class="tag">Ética mínima</span>
+        <span class="tag" style="color:var(--accent);border-color:rgba(255,77,77,.3)">EP · Cuestionario</span>
       </div>
     </div>
   </div>
+
+  <!-- Objetivo + Caso -->
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <div class="card-label">Logro del tema</div>
+      <h4>Identifica procesos de ingesta, perfilado y control de calidad para asegurar el uso adecuado del dato en el análisis</h4>
+      <ul>
+        <li>Importar datos desde CSV, Excel y JSON detectando codificaciones y delimitadores</li>
+        <li>Generar un perfil de calidad: tipos, rangos, consistencia y unicidad</li>
+        <li>Tratar nulos, duplicados y outliers con justificación</li>
+        <li>Construir un diccionario de datos con licencia y uso responsable</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Caso de negocio — Retail</div>
+      <h4>Supermercado Wong: las ventas del dashboard no cuadran con contabilidad</h4>
+      <p>El equipo de finanzas de Wong Perú detectó una diferencia de S/ 2.3 millones entre el reporte de ventas del BI y el cierre contable del trimestre. Se sospecha de registros duplicados, precios en cero y productos sin categoría. Te entregan el CSV crudo de cajas del último trimestre.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> diagnosticar el dataset antes de que el CFO presente a directorio en 48 horas.</p>
+    </div>
+  </div>
+
+  <!-- Casos reales -->
+  <div class="sec-label">Casos reales de negocio</div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-red">🛒</div>
+      <div><div class="case-co">Retail · EE.UU. · 2012</div>
+      <div class="case-ti">Target predijo embarazos con datos de compra — y violó la privacidad de una familia</div></div>
+    </div>
+    <div class="case-body">
+      <p>Target asignó un "pregnancy prediction score" a cada cliente basándose en patrones de compra: lociones sin fragancia, suplementos de calcio, bolsas grandes. El modelo era sorprendentemente preciso. Un padre en Minnesota recibió cupones de ropa de bebé para su hija adolescente antes de que él lo supiera.</p>
+      <p>El problema no fue técnico: el dato era correcto, el modelo funcionaba. El problema fue de <strong>calidad ética</strong>: usar datos válidos para un fin que el cliente nunca autorizó.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección para el analista:</strong> La calidad del dato incluye la pregunta "¿deberíamos usar esto para esto?". Un dato técnicamente correcto puede ser éticamente defectuoso. El diccionario de datos debe incluir restricciones de uso, no solo tipos.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-amber">🦠</div>
+      <div><div class="case-co">Salud pública · Perú y Reino Unido · 2020-2021</div>
+      <div class="case-ti">Los datos de COVID-19 que llegaron en PDF y con definiciones cambiantes</div></div>
+    </div>
+    <div class="case-body">
+      <p>Reino Unido perdió 16,000 casos positivos en septiembre de 2020 porque Excel tiene un límite de 65,536 filas por hoja y nadie lo verificó. En Perú, el cambio en la definición oficial de "muerte por COVID" en mayo de 2021 generó una discrepancia de más de 50,000 fallecidos entre las cifras anteriores y las actualizadas — no fue ocultamiento, fue inconsistencia de definición.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> La <strong>consistencia</strong> en la definición del dato vale tanto como el dato mismo. ¿Qué cuenta exactamente como un caso? ¿Cambió la definición en el tiempo? Sin esto, los datos son ruido con formato.</div></div>
+    </div>
+  </div>
+
+  <!-- Flujo de clase -->
+  <div class="sec-label">Flujo de clase</div>
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"¿Cuánto cuesta un dato malo?"</h5><p>Knight Capital perdió $440M en 45 min por un servidor con datos de configuración desactualizados. IBM estima pérdidas de $3.1T anuales en EE.UU. por mala calidad de datos. Pregunta al aula: ¿cuánto vale un dato incorrecto en tu industria?</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Demo + lab guiado en Power BI y Python</h5><p>Cargar el CSV del caso Wong. Generar perfil de calidad. Identificar los 5 problemas principales. Aplicar 3 acciones de limpieza justificadas. Construir diccionario de datos con licencia.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>¿Qué le dices al CFO en 2 oraciones?</h5><p>Cada equipo sintetiza el problema encontrado y la decisión que cambiaría. ¿Cuánto del diferencial de S/ 2.3M se explica con los problemas encontrados?</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real en producción:</strong> Eliminar todas las filas con nulos asumiendo que son aleatorios (MCAR), cuando en realidad los nulos en precio_unitario se concentran en la categoría "devoluciones" (MNAR). Eliminarlos distorsiona el revenue neto hasta en un 12%.</div></div>
+
+  <!-- Lab -->
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema1</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T1</div><div class="lab-title">Ingesta, perfilado y limpieza básica</div></div>
+      <div class="lab-tool">Power BI Desktop · Python (opcional)</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l1','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l1','python')">Python</div>
+      <div class="lab-tab" onclick="switchTab(this,'l1','pbi')">Power BI</div>
+      <div class="lab-tab" onclick="switchTab(this,'l1','entregables')">Entregables</div>
+    </div>
+    <div id="l1-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Descargar el dataset, registrar fuente, fecha y licencia. Crear carpeta: <strong>UAIN1008V_Tema1_ApellidoNombre</strong></div></li>
+        <li><div class="step-n">2</div><div><strong>Carga y combinación:</strong> cargar 2 archivos distintos (CSV + Excel o JSON), combinarlos y definir correctamente los tipos de datos en Power Query.</div></li>
+        <li><div class="step-n">3</div><div><strong>Perfilado (5 problemas):</strong> generar reporte de calidad e identificar los 5 problemas principales con su dimensión de calidad afectada.</div></li>
+        <li><div class="step-n">4</div><div><strong>Limpieza básica:</strong> aplicar 3 acciones de limpieza y documentar por qué se aplicaron, qué impacto tiene en el negocio si no se aplican.</div></li>
+        <li><div class="step-n">5</div><div><strong>Diccionario de datos:</strong> elaborar diccionario con más de 10 campos incluyendo nombre, tipo, rango válido, % de nulos y notas de uso responsable.</div></li>
+        <li><div class="step-n">6</div><div><strong>Validación:</strong> verificar coherencia de tipos, totales y filtros. Documentar supuestos y decisiones de limpieza.</div></li>
+        <li><div class="step-n">7</div><div><strong>Exportar evidencias:</strong> PDF con procedimiento completo + capturas + hallazgos + reflexión (1-2 páginas).</div></li>
+      </ul>
+    </div>
+    <div id="l1-python" class="lab-content">
+<div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
+
+<span class="cm"># 1. Cargar con encoding correcto</span>
+df = pd.<span class="fn">read_csv</span>(<span class="str">'ventas_wong.csv'</span>, encoding=<span class="str">'latin-1'</span>,
+                parse_dates=[<span class="str">'fecha_venta'</span>],
+                dtype={<span class="str">'codigo_producto'</span>:<span class="str">'str'</span>})
+
+<span class="cm"># 2. Diagnóstico inicial</span>
+<span class="fn">print</span>(df.<span class="fn">info</span>())
+nulos = df.<span class="fn">isnull</span>().<span class="fn">sum</span>() / <span class="fn">len</span>(df) * 100
+<span class="fn">print</span>(nulos[nulos > 0].<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>))
+
+<span class="cm"># 3. Perfil automático de calidad</span>
+profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Reporte Calidad T1"</span>, minimal=<span class="kw">True</span>)
+profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad_T1.html"</span>)
+
+<span class="cm"># 4. Detección de duplicados</span>
+dupes = df.<span class="fn">duplicated</span>(subset=[<span class="str">'id_transaccion'</span>]).<span class="fn">sum</span>()
+<span class="fn">print</span>(<span class="str">f"Duplicados: {dupes}"</span>)
+
+<span class="cm"># 5. Outliers por IQR en precio_unitario</span>
+Q1 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.25)
+Q3 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.75)
+IQR = Q3 - Q1
+outliers = df[(df[<span class="str">'precio_unitario'</span>] &lt; Q1-1.5*IQR) |
+              (df[<span class="str">'precio_unitario'</span>] &gt; Q3+1.5*IQR)]
+<span class="fn">print</span>(<span class="str">f"Outliers detectados: {len(outliers)}"</span>)</div>
+    </div>
+    <div id="l1-pbi" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Power Query: importar CSV y Excel. Revisar tipos detectados automáticamente. Corregir columnas de fecha y precio.</div></li>
+        <li><div class="step-n">2</div><div>Usar "Vista de calidad de columna" y "Vista de distribución" en Power Query para identificar nulos y valores atípicos visualmente.</div></li>
+        <li><div class="step-n">3</div><div>Crear columna calculada: % completitud por columna. Tarjetas: total filas / filas válidas / % completitud global.</div></li>
+        <li><div class="step-n">4</div><div>Histograma de precio_unitario para visualizar distribución y detectar valores imposibles (cero, negativos).</div></li>
+        <li><div class="step-n">5</div><div>Tabla resumen de anomalías: tipo de problema, columna afectada, cantidad de filas, impacto estimado en revenue.</div></li>
+      </ul>
+    </div>
+    <div id="l1-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema1_ApellidoNombre.pdf — procedimiento completo con capturas, análisis y reflexión (1-2 páginas).</div></li>
+        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> archivo .pbix con Power Query aplicado + capturas del perfil de calidad.</div></li>
+        <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook .ipynb ejecutado con ydata-profiling + celdas de análisis comentadas.</div></li>
+        <li><div class="step-n">📋</div><div><strong>Diccionario:</strong> Google Sheets o Excel con más de 10 campos + licencia + uso responsable declarado.</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Dataset -->
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Ventas Minoristas Perú</h4><p>Datos de transacciones de comercios peruanos. Variables: fecha, categoria, monto, region, canal_venta. Problemas reales de calidad incluidos.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>Superstore Sales Dataset</h4><p>Dataset de ventas de una cadena retail con regiones, categorías, descuentos y ganancias. Más de 9,000 registros con inconsistencias de formato reales.</p><a href="https://www.kaggle.com/datasets/vivek468/superstore-dataset-final" target="_blank">↗ Kaggle: Superstore Dataset</a></div>
+    <div><div class="card-label">Problemas de calidad presentes</div><p>→ Fechas en formatos mixtos (DD/MM vs MM/DD)</p><p>→ Descuentos mayores a 1.0 (error de captura)</p><p>→ Profit negativo sin explicación contextual</p><p>→ Categorías con variaciones de texto ("Tech" vs "Technology")</p></div>
+  </div>
+
+  <!-- Resources -->
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Data Futurology — "Calidad de datos en producción"</h5><a href="https://www.datafuturology.com" target="_blank">datafuturology.com</a><div class="res-use">Inicio de clase: reproducir 10 min. Los estudiantes identifican qué dimensión de calidad se discute en cada problema mencionado.</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Rafa Gonzalez — "Limpieza de datos con pandas" (español)</h5><a href="https://www.youtube.com/@rafa_python" target="_blank">youtube.com/@rafa_python</a><div class="res-use">Antes del lab: ver como preparación técnica. Identificar qué decisiones de limpieza toma el autor y si aplicarían al caso Wong.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>PacktPublishing / Data-Quality-Fundamentals</h5><a href="https://github.com/PacktPublishing/Data-Quality-Fundamentals" target="_blank">github.com/PacktPublishing/Data-Quality-Fundamentals</a><div class="res-use">Tarea: revisar capítulo 2 (Missing Data) y replicar el análisis de nulos con el dataset del lab.</div></div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 01 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Nulos:</strong> Al importar el CSV de ventas, el 28% de la columna precio_unitario es nulo. Al cruzar con la columna tipo_transaccion descubres que el 91% de esos nulos son devoluciones. ¿Qué mecanismo de ausencia es este (MCAR, MAR, MNAR)? ¿Qué estrategia de tratamiento aplicarías y cómo afecta al cálculo de revenue neto si eliminas esas filas?</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Decisión de negocio:</strong> Encuentras 847 registros con precio_unitario = 0 (3.2% del total). Algunos corresponden a productos de cortesía del supermercado, otros parecen errores de captura. ¿Cómo distingues ambos casos? ¿Qué harías con cada grupo? Argumenta con criterio de negocio, no solo técnico.</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Caso ético:</strong> Wong quiere usar los patrones de compra de sus clientes con tarjeta de fidelización para inferir si están embarazadas y enviarles ofertas de pañales antes de que lo anuncien. Desde tu rol como analista, ¿qué consideraciones éticas incluirías en el diccionario de datos? ¿Qué restricciones de uso declararías?</div></div>
+  </div>
 </div>
 
+<!-- ═══════════════════ TEMA 2 ═══════════════════ -->
+<div class="week-panel" id="panel-2">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(77,166,255,.12);color:var(--info)">02</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 02 · Limpieza y transformación</div>
+      <div class="wk-title">Wrangling con Python/R y SQL</div>
+      <div class="wk-desc">El wrangling no es limpiar datos — es construir la tabla analítica que habilita decisiones. Un JOIN incorrecto contamina todo lo que viene después.</div>
+      <div class="tag-row">
+        <span class="tag">Normalización · Fechas · Cast de tipos</span>
+        <span class="tag">SQL: SELECT · JOIN · GROUP BY · HAVING</span>
+        <span class="tag">KPIs base</span>
+        <span class="tag">Esquema estrella</span>
+        <span class="tag" style="color:var(--info);border-color:rgba(77,166,255,.3)">EP · Cuestionario</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--info)">
+      <div class="card-label">Logro del tema</div>
+      <h4>Aplica técnicas de limpieza y transformación con Python, R y SQL para preparar datos estructurados que faciliten el análisis</h4>
+      <ul>
+        <li>Estandarizar formatos, parsear fechas y castear tipos en al menos 3 columnas</li>
+        <li>Crear base local en SQL Server Express, ejecutar 2 JOINs y 1 resumen GROUP BY</li>
+        <li>Calcular 3 KPIs base: total, promedio, porcentaje con verificación</li>
+        <li>Diseñar modelo estrella básico con tabla de hechos y dimensiones</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Caso de negocio — E-commerce</div>
+      <h4>Falabella.com: integrar pedidos, clientes y logística en una sola tabla analítica</h4>
+      <p>Falabella opera con 3 sistemas distintos: SAP (pedidos), Salesforce (clientes) y un TMS propio (envíos). Cada sistema exporta en diferente formato y con IDs incompatibles. El equipo de operaciones necesita calcular el tiempo promedio de entrega por región para decidir dónde abrir un nuevo centro de distribución.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> construir la tabla analítica maestra que una los 3 sistemas.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Casos reales de negocio</div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-blue">🚢</div>
+      <div><div class="case-co">Logística · Global · 2021</div>
+      <div class="case-ti">El error de JOIN que hizo que Maersk perdiera la trazabilidad de 60,000 contenedores</div></div>
+    </div>
+    <div class="case-body">
+      <p>Durante la migración de sus sistemas de seguimiento de contenedores, Maersk realizó un INNER JOIN entre la tabla de manifiestos y la tabla de ubicaciones usando un campo de ID que tenía variaciones de formato (con y sin prefijo de país). El resultado: 60,000 contenedores quedaron sin ubicación en el sistema durante horas porque sus registros no hicieron match.</p>
+      <p>El costo: retrasos operacionales en 120 puertos y clientes que no podían rastrear mercancías valoradas en millones de dólares.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Antes de cualquier JOIN, verificar integridad referencial. ¿Cuántos registros de la tabla izquierda no tienen match en la derecha? Un INNER JOIN silencioso puede eliminar datos críticos sin advertir. Siempre comparar conteo antes y después del JOIN.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-amber">🏦</div>
+      <div><div class="case-co">Banca · Perú · 2019</div>
+      <div class="case-ti">BCP: el KPI de morosidad estaba mal calculado durante 6 meses por un error de desnormalización</div></div>
+    </div>
+    <div class="case-body">
+      <p>El equipo de riesgo del BCP calculaba la tasa de morosidad dividiendo "créditos vencidos" entre "cartera total". Después de una migración de esquemas, la tabla de cartera total incluyó dos veces los créditos refinanciados (estaban en dos dimensiones distintas que se unieron con FULL JOIN). El KPI reportaba una morosidad 3 puntos porcentuales menor a la real durante 6 meses antes de que auditoría lo detectara.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Los KPIs tienen denominadores que nadie audita. <strong>Verificar el KPI contra una fuente alternativa</strong> antes de reportarlo. Un error de modelado en el esquema estrella puede sesgar todos los indicadores derivados.</div></div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"Los datos que nunca hablan entre sí"</h5><p>Mostrar en pantalla 3 archivos del mismo negocio con IDs incompatibles, fechas en formatos distintos y nombres de clientes con variaciones. ¿Cuánto tiempo pierde un analista sin saber wrangling?</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Lab: tabla analítica maestra Falabella</h5><p>SQL: crear BD local, unir pedidos + clientes + envíos con 2 JOINs. Python: normalizar IDs y fechas. Diseñar modelo estrella en diagrams.net. Calcular 3 KPIs y verificarlos.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>¿Dónde abrimos el nuevo CD?</h5><p>Con la tabla unificada: ¿qué región tiene el peor tiempo de entrega? ¿Qué volumen justifica un centro de distribución? Cada equipo presenta su recomendación en 2 minutos.</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real:</strong> Hacer INNER JOIN entre pedidos y clientes perdiendo todos los pedidos de compradores "invitados" (sin cuenta registrada). En e-commerce, esto puede representar el 25-35% del volumen total de ventas — eliminarlo sesga cualquier análisis de revenue.</div></div>
+
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema2</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T2</div><div class="lab-title">Wrangling: ETL, JOINs y KPIs base</div></div>
+      <div class="lab-tool">Power BI · SQL Server Express · SSMS · diagrams.net</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l2','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l2','sql')">SQL</div>
+      <div class="lab-tab" onclick="switchTab(this,'l2','entregables')">Entregables</div>
+    </div>
+    <div id="l2-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Descargar dataset, registrar fuente y licencia. Crear carpeta: <strong>UAIN1008V_Tema2_ApellidoNombre</strong></div></li>
+        <li><div class="step-n">2</div><div><strong>Estandarización:</strong> corregir fechas, textos y tipos numéricos en al menos 3 columnas. Documentar cada corrección.</div></li>
+        <li><div class="step-n">3</div><div><strong>SQL — Integración:</strong> crear BD local en SQL Server Express, realizar 2 JOINs justificados (comparar INNER vs LEFT) y 1 resumen GROUP BY con HAVING.</div></li>
+        <li><div class="step-n">4</div><div><strong>KPIs base:</strong> calcular 3 KPIs (total ventas, ticket promedio, % devoluciones). Verificar cada uno contra una fuente alternativa.</div></li>
+        <li><div class="step-n">5</div><div><strong>Modelo estrella:</strong> diseñar esquema en diagrams.net con tabla de hechos y mínimo 2 dimensiones (tiempo, producto o cliente).</div></li>
+        <li><div class="step-n">6</div><div><strong>Validación y exportación:</strong> coherencia de totales, documentar supuestos. Exportar evidencias en PDF.</div></li>
+      </ul>
+    </div>
+    <div id="l2-sql" class="lab-content">
+<div class="code-block"><span class="cm">-- Verificar integridad antes del JOIN</span>
+<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">AS</span> pedidos_sin_cliente
+<span class="kw">FROM</span> pedidos p
+<span class="kw">LEFT JOIN</span> clientes c <span class="kw">ON</span> p.id_cliente = c.id_cliente
+<span class="kw">WHERE</span> c.id_cliente <span class="kw">IS NULL</span>;
+
+<span class="cm">-- Tabla analítica con CTE</span>
+<span class="kw">WITH</span> pedidos_enriquecidos <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        p.id_pedido,
+        p.fecha_pedido,
+        p.monto_total,
+        c.region,
+        c.segmento,
+        <span class="fn">DATEDIFF</span>(e.fecha_entrega, p.fecha_pedido) <span class="kw">AS</span> dias_entrega,
+        <span class="kw">CASE</span>
+            <span class="kw">WHEN</span> c.compras_historicas &gt; 5000 <span class="kw">THEN</span> <span class="str">'Premium'</span>
+            <span class="kw">WHEN</span> c.compras_historicas &gt; 1000 <span class="kw">THEN</span> <span class="str">'Regular'</span>
+            <span class="kw">ELSE</span> <span class="str">'Nuevo'</span>
+        <span class="kw">END</span> <span class="kw">AS</span> tier_cliente
+    <span class="kw">FROM</span> pedidos p
+    <span class="kw">LEFT JOIN</span> clientes c <span class="kw">ON</span> p.id_cliente = c.id_cliente
+    <span class="kw">LEFT JOIN</span> envios e <span class="kw">ON</span> p.id_pedido = e.id_pedido
+)
+<span class="kw">SELECT</span> region,
+    <span class="fn">AVG</span>(dias_entrega) <span class="kw">AS</span> promedio_entrega,
+    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_pedidos,
+    <span class="fn">SUM</span>(monto_total) <span class="kw">AS</span> revenue_region
+<span class="kw">FROM</span> pedidos_enriquecidos
+<span class="kw">GROUP BY</span> region
+<span class="kw">HAVING COUNT</span>(*) &gt; 100
+<span class="kw">ORDER BY</span> promedio_entrega <span class="kw">DESC</span>;</div>
+    </div>
+    <div id="l2-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema2_ApellidoNombre.pdf — procedimiento + evidencias + 2 hallazgos + 2 limitaciones.</div></li>
+        <li><div class="step-n">🗄️</div><div><strong>SQL Server:</strong> script .sql con CREATE TABLE, cargas e INSERT, 2 JOINs y consultas de KPIs con resultados capturados.</div></li>
+        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> .pbix con modelo estrella implementado + medidas DAX para los 3 KPIs.</div></li>
+        <li><div class="step-n">🗺️</div><div><strong>Diagrama:</strong> imagen del modelo estrella (diagrams.net) con hechos y dimensiones etiquetados.</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Exportaciones Peruanas</h4><p>Datos de exportaciones peruanas con empresa, producto, valor FOB, país destino, fecha. Requiere integración de tablas de empresas y aranceles.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>Global Superstore (multi-tabla)</h4><p>4 archivos relacionados: pedidos, devoluciones, clientes, personas. Diseñado para practicar JOINs múltiples y esquema estrella.</p><a href="https://www.kaggle.com/datasets/apoorvaappz/global-super-store-dataset" target="_blank">↗ Kaggle: Global Superstore</a></div>
+    <div><div class="card-label">Retos incluidos</div><p>→ IDs con formatos inconsistentes entre tablas</p><p>→ Fechas en texto sin formato estándar</p><p>→ Pedidos sin cliente registrado (invitados)</p><p>→ Devoluciones mezcladas con ventas normales</p></div>
+  </div>
+
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>DataCafé — "SQL en el mundo real de datos"</h5><a href="https://open.spotify.com/show/datacafe" target="_blank">Spotify → DataCafé Podcast</a><div class="res-use">Tarea: escuchar y mapear los problemas de integración mencionados al dataset del lab.</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Código Máquina — "pandas merge y join completo" (español)</h5><a href="https://www.youtube.com/@CodigoMaquina" target="_blank">youtube.com/@CodigoMaquina</a><div class="res-use">Antes del lab: ver para reforzar visualmente la diferencia entre INNER, LEFT y FULL JOIN con ejemplos.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>microsoft / powerbi-desktop-samples</h5><a href="https://github.com/microsoft/powerbi-desktop-samples" target="_blank">github.com/microsoft/powerbi-desktop-samples</a><div class="res-use">Tarea: revisar el ejemplo "Sales & Returns" para ver cómo se estructura un modelo estrella real en Power BI.</div></div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 2</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 02 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>SQL — JOIN:</strong> Tienes pedidos (85,000 filas) y clientes (62,000 filas). INNER JOIN devuelve 58,000 filas; LEFT JOIN devuelve 85,000. ¿Qué explica la diferencia de 27,000 filas? ¿Qué JOIN usarías para calcular el revenue total de todos los pedidos y cuál para el LTV de clientes registrados? Justifica.</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>KPI:</strong> Calculas el ticket promedio como SUM(monto_total) / COUNT(*). Tu compañero calcula AVG(monto_total). Obtienes resultados diferentes. ¿Por qué? ¿Cuál es más correcto para reportar al gerente comercial? ¿En qué situación ambos serían idénticos?</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Diseño:</strong> El equipo de ventas quiere analizar ingresos por región, categoría de producto, canal (online/tienda) y periodo mensual. Diseña el esquema estrella mínimo necesario: nombre las tablas de hechos y dimensiones, e indica qué columnas incluiría cada una.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMA 3 ═══════════════════ -->
+<div class="week-panel" id="panel-3">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(52,211,153,.12);color:var(--accent3)">03</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 03 · EDA y Power BI / Python</div>
+      <div class="wk-title">Exploración y estadística descriptiva</div>
+      <div class="wk-desc">Un gráfico sin hipótesis previa es decoración. La estadística descriptiva es la diferencia entre ver números y ver patrones de negocio.</div>
+      <div class="tag-row">
+        <span class="tag">Media · Mediana · Dispersión</span>
+        <span class="tag">Histogramas · Boxplots · Barras</span>
+        <span class="tag">Mapas y análisis geográfico</span>
+        <span class="tag">Filtros y drill-down</span>
+        <span class="tag" style="color:var(--accent3);border-color:rgba(77,255,179,.3)">EP · Cuestionario</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--accent3)">
+      <div class="card-label">Logro del tema</div>
+      <h4>Describe medidas estadísticas y distribuciones para comprender el comportamiento general de los datos</h4>
+      <ul>
+        <li>Calcular medidas de tendencia y dispersión para 5 variables con interpretación</li>
+        <li>Construir 4 gráficos correctamente rotulados respondiendo hipótesis previas</li>
+        <li>Elaborar 1 mapa geográfico y explicar el patrón observado</li>
+        <li>Implementar 2 filtros y 1 drill-down en un dashboard exploratorio</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Caso de negocio — Salud pública</div>
+      <h4>EsSalud: ¿qué factores explican el ausentismo en citas médicas en Lima?</h4>
+      <p>EsSalud registra un 31% de ausentismo en citas programadas de atención primaria en Lima Metropolitana. Cada cita perdida genera S/ 85 de capacidad ociosa. El director regional quiere saber qué perfil de paciente no asiste, antes de diseñar un sistema de recordatorios por WhatsApp.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> identificar los 3 hallazgos más accionables con evidencia visual.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Casos reales de negocio</div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-green">📊</div>
+      <div><div class="case-co">Retail · EE.UU. · Estudio clásico de estadística mal aplicada</div>
+      <div class="case-ti">Anscombe's Quartet: cuatro datasets con las mismas estadísticas pero distribuciones radicalmente distintas</div></div>
+    </div>
+    <div class="case-body">
+      <p>Francis Anscombe demostró en 1973 que 4 datasets diferentes podían tener exactamente la misma media, varianza, correlación y línea de regresión — pero al graficarlos eran completamente distintos. Este principio es más relevante hoy que nunca: los analistas que reportan solo la media sin visualizar la distribución cometen errores graves.</p>
+      <p>En retail moderno, esto ocurre cuando se reporta el "ingreso promedio por cliente" sin notar que la distribución es bimodal: hay un grupo masivo de clientes que compra $50 y un grupo pequeño de clientes VIP que compra $5,000. La media de $180 no describe a nadie.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> <strong>Siempre visualizar antes de reportar estadísticas.</strong> La media sin distribución es una mentira cortés. En dashboards ejecutivos, incluir siempre el histograma junto a la tarjeta de promedio.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-teal">🌍</div>
+      <div><div class="case-co">Gobierno · Perú · 2022</div>
+      <div class="case-ti">MIDIS: el mapa que reveló que el programa Juntos llegaba mejor a Cusco que a Puno — con la misma inversión</div></div>
+    </div>
+    <div class="case-body">
+      <p>El Ministerio de Desarrollo e Inclusión Social usó análisis geoespacial para cruzar la cobertura del programa Juntos con indicadores de pobreza por distrito. El mapa reveló que distritos en Puno con mayor índice de pobreza extrema tenían menos cobertura que distritos similares de Cusco, a pesar de recibir el mismo presupuesto per cápita. Sin el mapa, los números agregados parecían correctos.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> El análisis geográfico revela patrones que los promedios nacionales ocultan. En Power BI, un mapa de calor de KPIs por región puede cambiar completamente la lectura de un indicador que "parece bien" a nivel agregado.</div></div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"La media que miente con la verdad"</h5><p>Mostrar el Anscombe Quartet en vivo. Luego: ¿cuántos de ustedes han reportado un promedio sin ver la distribución? El tiempo de espera promedio de 32 minutos que oculta que el grupo A espera 8 minutos y el grupo B espera 58.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>EDA estructurado: hipótesis primero</h5><p>Cada equipo escribe 3 hipótesis antes de ver los datos. Análisis univariado, bivariado y mapa. Cada gráfico debe responder una hipótesis. Prohibido graficar sin pregunta previa.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>Top 3 para el director de EsSalud</h5><p>Cada equipo presenta 3 hallazgos en lenguaje ejecutivo. ¿Qué acción concreta recomendarían con S/ 500,000 de presupuesto de intervención?</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real:</strong> Reportar el tiempo de espera promedio cuando la distribución es bimodal. La media de 32 min oculta que el turno mañana espera 12 min y el turno tarde espera 58 min. Dos realidades distintas que requieren soluciones distintas.</div></div>
+
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema3</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T3</div><div class="lab-title">EDA visual con Power BI y estadística descriptiva</div></div>
+      <div class="lab-tool">Power BI Desktop · Python (opcional)</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l3','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l3','python')">Python</div>
+      <div class="lab-tab" onclick="switchTab(this,'l3','entregables')">Entregables</div>
+    </div>
+    <div id="l3-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Antes de abrir el dataset: <strong>escribir 3 hipótesis de negocio</strong> sobre qué factores esperan encontrar. Esto es obligatorio.</div></li>
+        <li><div class="step-n">2</div><div><strong>Análisis descriptivo:</strong> calcular medidas para 5 variables (media, mediana, desviación estándar, mínimo, máximo). Describir 2 hallazgos con interpretación de negocio.</div></li>
+        <li><div class="step-n">3</div><div><strong>4 gráficos:</strong> construir gráfico de barras, línea de tendencia, histograma y boxplot. Cada uno debe responder una hipótesis planteada al inicio.</div></li>
+        <li><div class="step-n">4</div><div><strong>Análisis espacial:</strong> elaborar 1 mapa coroplético (mapa de calor por región) y explicar el patrón observado con implicancia de negocio.</div></li>
+        <li><div class="step-n">5</div><div><strong>Dashboard interactivo:</strong> implementar 2 filtros (segmentadores) y 1 navegación drill-down que permita explorar de región a distrito.</div></li>
+        <li><div class="step-n">6</div><div><strong>Contraste de hipótesis:</strong> ¿cuáles de sus hipótesis iniciales se confirman? ¿Cuáles se refutan? Documentar en el reporte.</div></li>
+      </ul>
+    </div>
+    <div id="l3-python" class="lab-content">
+<div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">'citas_essalud.csv'</span>)
+
+<span class="cm"># H1: ¿Los días de espera afectan la asistencia?</span>
+fig, axes = plt.<span class="fn">subplots</span>(1, 2, figsize=(12, 4))
+df.<span class="fn">groupby</span>(<span class="str">'no_asistio'</span>)[<span class="str">'dias_espera'</span>].<span class="fn">hist</span>(
+    ax=axes[0], alpha=0.7, bins=20, color=[<span class="str">'#4dffb3'</span>,<span class="str">'#ff4d4d'</span>])
+axes[0].<span class="fn">set_title</span>(<span class="str">'Días de espera: asistió vs no asistió'</span>)
+
+<span class="cm"># H2: Tasa de ausentismo por día de semana</span>
+tasa = df.<span class="fn">groupby</span>(<span class="str">'dia_semana'</span>)[<span class="str">'no_asistio'</span>].<span class="fn">mean</span>() * 100
+tasa.<span class="fn">plot</span>(kind=<span class="str">'bar'</span>, ax=axes[1], color=<span class="str">'#4da6ff'</span>)
+axes[1].<span class="fn">set_title</span>(<span class="str">'% Ausentismo por día (%)'</span>)
+plt.<span class="fn">tight_layout</span>()
+
+<span class="cm"># Correlaciones</span>
+corr = df[[<span class="str">'edad'</span>,<span class="str">'dias_espera'</span>,<span class="str">'visitas_previas'</span>,<span class="str">'no_asistio'</span>]].<span class="fn">corr</span>()
+<span class="fn">sns.heatmap</span>(corr, annot=<span class="kw">True</span>, fmt=<span class="str">'.2f'</span>, cmap=<span class="str">'coolwarm'</span>)</div>
+    </div>
+    <div id="l3-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema3_ApellidoNombre.pdf — hipótesis iniciales + análisis + 4 gráficos + mapa + 2 hallazgos + 2 limitaciones.</div></li>
+        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> .pbix con 4 visualizaciones, mapa, 2 filtros y 1 drill-down funcional.</div></li>
+        <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook con análisis descriptivo y visualizaciones verificando los estadísticos del Power BI.</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Establecimientos de Salud Perú</h4><p>Atenciones médicas por establecimiento, región, tipo de diagnóstico y mes. Variables geoespaciales incluidas para análisis de mapas.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>Medical Appointment No Shows (Brasil)</h4><p>110K citas médicas reales. Variables: edad, género, barrio, días de espera, enfermedades crónicas, SMS de recordatorio, ausentismo. Patrones genuinos para EDA.</p><a href="https://www.kaggle.com/datasets/joniarroba/noshowappointments" target="_blank">↗ Kaggle: No-Show Appointments</a></div>
+    <div><div class="card-label">Hallazgos reales a descubrir</div><p>→ Más días de espera = mayor ausentismo</p><p>→ El SMS no reduce significativamente el ausentismo</p><p>→ Variación mayor al 15% por distrito/barrio</p><p>→ Los viernes tienen mayor ausentismo que los lunes</p></div>
+  </div>
+
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Hacia la IA — "EDA y estadística aplicada a negocio"</h5><a href="https://open.spotify.com/show/hacialaIA" target="_blank">Spotify → Hacia la IA</a><div class="res-use">Después del lab: escuchar y comparar los enfoques de EDA discutidos con los propios hallazgos del caso EsSalud.</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Aprende Machine Learning — "Detección de outliers en Python" (español)</h5><a href="https://www.youtube.com/@AprendeMachineLearning" target="_blank">youtube.com/@AprendeMachineLearning</a><div class="res-use">Antes del lab: ver para reforzar IQR, Z-score y visualización de distribuciones con seaborn.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>ResidentMario / missingno (visualización de patrones de nulos)</h5><a href="https://github.com/ResidentMario/missingno" target="_blank">github.com/ResidentMario/missingno</a><div class="res-use">Lab complementario: visualizar si los patrones de nulos del dataset tienen estructura (MAR) o son aleatorios (MCAR).</div></div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 3</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 03 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Estadística:</strong> El tiempo de espera promedio para una cita es 18 días. La mediana es 6 días. ¿Qué te dice esta diferencia sobre la distribución? ¿Cuál métrica reportarías al director de EsSalud para justificar un sistema de priorización de citas? ¿Cómo impacta esta elección en la decisión?</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Visualización:</strong> Tienes un boxplot de ingresos por region que muestra la región Lima con una caja muy compacta (Q1=1200, Q3=1800) y muchos outliers superiores (hasta 15,000). La región Arequipa tiene una caja más amplia (Q1=800, Q3=2800) sin outliers extremos. ¿Qué estrategia de comunicación de datos diferenciada aplicarías para cada región? ¿Qué tipo de negocio o servicio podría explicar cada distribución?</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Análisis geográfico:</strong> Tu mapa muestra que 3 distritos de Lima Norte concentran el 40% del ausentismo total, pero solo tienen el 22% de la población atendida. ¿Qué hipótesis generarías para explicar este patrón? ¿Qué variable de cruce geoespacial buscarías para confirmar o refutar cada hipótesis?</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMA 4 ═══════════════════ -->
+<div class="week-panel" id="panel-4">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(251,191,36,.12);color:var(--accent2)">04</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 04 · KPIs y análisis temporal</div>
+      <div class="wk-title">KPIs y análisis temporal</div>
+      <div class="wk-desc">Un KPI sin contexto temporal es una fotografía sin fecha. Aprende a diseñar métricas que respondan preguntas antes de que las hagan.</div>
+      <div class="tag-row">
+        <span class="tag">KPIs alineados a objetivos</span>
+        <span class="tag">Series temporales · MoM · YoY</span>
+        <span class="tag">Tarjetas KPI · Panel de control</span>
+        <span class="tag">Alertas y umbrales</span>
+        <span class="tag" style="color:var(--accent2);border-color:rgba(255,179,71,.3)">EP · Cuestionario</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Logro del tema</div>
+      <h4>Explica la definición y el uso de KPIs alineados a objetivos empresariales para el seguimiento del desempeño</h4>
+      <ul>
+        <li>Definir 4 KPIs con fórmula, fuente de datos y meta (benchmark del sector)</li>
+        <li>Calcular variaciones MoM y YoY e identificar periodos críticos</li>
+        <li>Implementar panel con 3 tarjetas KPI y 2 filtros de fecha en Power BI DAX</li>
+        <li>Definir 1 alerta con umbral justificado en función del negocio</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <div class="card-label">Caso de negocio — Fintech</div>
+      <h4>Yape / Plin: ¿por qué cayeron las transacciones un 23% en marzo?</h4>
+      <p>El CEO de una billetera digital recibió un reporte que muestra caída del 23% en transacciones en marzo. Antes de tomar decisiones, quiere saber: ¿es tendencia o estacionalidad? ¿Afecta a todos los segmentos o solo a uno? ¿Es peor que el año anterior? Tienes 18 meses de datos transaccionales por usuario.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent)">Tu misión:</strong> responder las 3 preguntas del CEO con evidencia temporal, no solo el número aislado.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Casos reales de negocio</div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-amber">📈</div>
+      <div><div class="case-co">Retail · Perú · 2023</div>
+      <div class="case-ti">Saga Falabella: el KPI de "ventas del mes" que ocultaba una caída real de tráfico</div></div>
+    </div>
+    <div class="case-body">
+      <p>El dashboard de Saga Falabella mostraba crecimiento de ventas del 8% en julio vs julio del año anterior. El CEO lo celebró en el directorio. Sin embargo, julio de ese año tenía 23 días hábiles y el año anterior tenía 20. Al normalizar por días hábiles, el crecimiento real era -3.2%: el tráfico a tiendas había caído significativamente.</p>
+      <p>El problema: el KPI de "ventas mensuales" nunca tuvo en cuenta el denominador de días hábiles ni el contexto de campañas (ese julio tuvo Cyber Días, el anterior no).</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Los KPIs tienen denominadores ocultos. Ventas/mes sin normalizar por días hábiles, feriados, o tamaño del mercado miente sistemáticamente. Siempre preguntar: <strong>"¿denominador de qué?"</strong></div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-red">🚨</div>
+      <div><div class="case-co">Manufactura · Alemania · 2019</div>
+      <div class="case-ti">Volkswagen: la alerta que llegó 3 semanas tarde por un dashboard que actualizaba mensualmente</div></div>
+    </div>
+    <div class="case-body">
+      <p>Una planta de Volkswagen en México detectó una tendencia creciente en el índice de defectos de pintura. El KPI se reportaba mensualmente. Para cuando el dashboard mostró el problema, ya habían salido de la línea 4,200 unidades con el defecto. El análisis posterior mostró que si el umbral de alerta hubiera activado en la semana 2, el problema se habría contenido en 600 unidades.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> La frecuencia de actualización del KPI debe coincidir con la velocidad del proceso que monitorea. Un KPI de control de calidad industrial que se actualiza mensualmente no es un KPI de control — es un registro histórico.</div></div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"El KPI que mintió con la verdad"</h5><p>Dashboard con ventas +8% YoY que en realidad es -3.2% al normalizar por días hábiles. ¿Habrías celebrado o investigado? La elección del KPI determina la decisión.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Construir el panel KPI desde cero en DAX</h5><p>Definir 4 KPIs con fórmula y meta. Calcular MoM y YoY. Implementar tarjetas KPI con variación. Definir 1 alerta con umbral justificado. Identificar la anomalía de marzo.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>Respuesta al CEO: 3 preguntas, 3 datos</h5><p>¿Es tendencia o estacionalidad? ¿Es peor que el año anterior? ¿Afecta a todos los segmentos? Cada equipo responde con su dashboard en vivo — sin texto, solo el gráfico.</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real:</strong> Comparar febrero vs marzo sin ajustar por número de días del mes. Marzo tiene 31 días y febrero tiene 28 — una diferencia del 10.7% solo por el calendario que se confunde con crecimiento real del negocio.</div></div>
+
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema4</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T4</div><div class="lab-title">Panel de KPIs temporales con DAX</div></div>
+      <div class="lab-tool">Power BI Desktop · Power BI Service (Free) · Google Sheets</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l4','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l4','sql')">SQL + DAX</div>
+      <div class="lab-tab" onclick="switchTab(this,'l4','entregables')">Entregables</div>
+    </div>
+    <div id="l4-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Descargar dataset. <strong>Definir 4 KPIs en Google Sheets</strong> antes de implementarlos: nombre, fórmula exacta, fuente, meta del sector y frecuencia de actualización ideal.</div></li>
+        <li><div class="step-n">2</div><div><strong>Comparación temporal:</strong> calcular MoM (mes vs mes anterior) y YoY (mes vs mismo mes año anterior). Identificar los 3 periodos con mayor variación negativa.</div></li>
+        <li><div class="step-n">3</div><div><strong>Panel de control DAX:</strong> crear tabla de calendario, implementar 3 tarjetas KPI con indicador de variación (flecha + color) y 2 filtros de fecha (año, mes).</div></li>
+        <li><div class="step-n">4</div><div><strong>Alerta:</strong> definir 1 umbral de alerta visual (formato condicional en Power BI). Justificar el umbral elegido con datos históricos o benchmark del sector.</div></li>
+        <li><div class="step-n">5</div><div><strong>Publicación:</strong> publicar el dashboard en Power BI Service (Free) y compartir el link de solo lectura como evidencia.</div></li>
+        <li><div class="step-n">6</div><div>Exportar evidencias: PDF con capturas del panel + análisis de periodos críticos + reflexión sobre el denominador de cada KPI.</div></li>
+      </ul>
+    </div>
+    <div id="l4-sql" class="lab-content">
+<div class="code-block"><span class="cm">-- KPIs mensuales con MoM en SQL</span>
+<span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="fn">FORMAT</span>(fecha_transaccion, <span class="str">'yyyy-MM'</span>) <span class="kw">AS</span> mes,
+        <span class="fn">COUNT</span>(*) <span class="kw">AS</span> n_transacciones,
+        <span class="fn">SUM</span>(monto) <span class="kw">AS</span> revenue,
+        <span class="fn">AVG</span>(monto) <span class="kw">AS</span> ticket_promedio,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> id_usuario) <span class="kw">AS</span> usuarios_activos
+    <span class="kw">FROM</span> transacciones
+    <span class="kw">GROUP BY</span> <span class="fn">FORMAT</span>(fecha_transaccion, <span class="str">'yyyy-MM'</span>)
+)
+<span class="kw">SELECT</span> mes, revenue,
+    <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> mes) <span class="kw">AS</span> revenue_mes_ant,
+    <span class="fn">ROUND</span>((revenue - <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span>
+        (<span class="kw">ORDER BY</span> mes)) * 100.0 /
+        <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> mes), 0), 1) <span class="kw">AS</span> mom_pct
+<span class="kw">FROM</span> monthly <span class="kw">ORDER BY</span> mes;
+
+<span class="cm">-- DAX: Revenue MoM% en Power BI</span>
+<span class="cm">-- Revenue MoM % =</span>
+<span class="cm">-- DIVIDE([Revenue] - [Revenue MoM Ant], [Revenue MoM Ant])</span></div>
+    </div>
+    <div id="l4-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema4_ApellidoNombre.pdf — definición de KPIs + panel + análisis de periodos críticos + alerta justificada.</div></li>
+        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> .pbix con tabla calendario, 3 tarjetas KPI con variación, 2 filtros de fecha y 1 alerta visual.</div></li>
+        <li><div class="step-n">🔗</div><div><strong>Link Power BI Service:</strong> URL del dashboard publicado en modo de solo lectura.</div></li>
+        <li><div class="step-n">📋</div><div><strong>Google Sheets:</strong> definición formal de los 4 KPIs con fórmula, fuente, meta y frecuencia.</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — PBI Regional Trimestral Perú</h4><p>PBI por región y trimestre 2015-2023. Variables: región, sector económico, valor, variación porcentual. Ideal para MoM, YoY y detección de anomalías por COVID.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>Store Sales — Time Series Forecasting</h4><p>Ventas diarias de 54 tiendas en Ecuador por familia de producto. 3 años de datos con feriados y eventos especiales marcados. Perfecto para análisis temporal.</p><a href="https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data" target="_blank">↗ Kaggle: Store Sales Ecuador</a></div>
+    <div><div class="card-label">KPIs a construir en el lab</div><p>→ Revenue total por mes (con variación MoM%)</p><p>→ Ticket promedio normalizado por días hábiles</p><p>→ % crecimiento YoY por categoría de producto</p><p>→ Alerta: caída &gt;10% vs mes anterior</p></div>
+  </div>
+
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>DataCafé — "Métricas que importan en producto digital"</h5><a href="https://open.spotify.com/show/datacafe" target="_blank">Spotify → DataCafé</a><div class="res-use">Inicio: debatir qué KPIs de producto digital serían equivalentes para una empresa peruana (Yape, Rappi, Mercado Libre).</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>El Pelado Nerd — "Análisis temporal en Python con pandas" (español)</h5><a href="https://www.youtube.com/@ElPeladoNerd" target="_blank">youtube.com/@ElPeladoNerd</a><div class="res-use">Lab complementario: ver para implementar resample() y rolling() en Python como verificación de los KPIs de Power BI.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>microsoft / powerbi-desktop-samples (Financial Sample)</h5><a href="https://github.com/microsoft/powerbi-desktop-samples" target="_blank">github.com/microsoft/powerbi-desktop-samples</a><div class="res-use">Tarea: analizar el Financial Sample oficial de Microsoft y adaptar las medidas DAX de comparación temporal al dataset del caso.</div></div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 4</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 04 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>KPI design:</strong> El CEO quiere saber si el negocio "está creciendo". Tienes: total de transacciones (+8%), revenue total (+12%), usuarios activos (+3%), y ticket promedio (+9%) — todos subiendo. Sin embargo, el revenue por usuario activo está cayendo -5%. ¿Cuál KPI presentas primero en el directorio y por qué? ¿Qué historia cuenta cada métrica?</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>DAX / SQL:</strong> Escribe la fórmula DAX (o la lógica SQL equivalente) para calcular el crecimiento YoY del revenue de un mes, considerando que algunos meses del año anterior no tienen datos (la empresa lanzó en abril del año pasado). ¿Cómo manejas el caso de división por cero?</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Alerta:</strong> Tu panel muestra que el revenue de Lima cayó 18% MoM en agosto. Al investigar descubres que Fiestas Patrias cayó en semana de trabajo ese año (vs fines de semana el año anterior), desplazando ventas. ¿Diseñas la alerta de todas formas? ¿Cómo modificarías el umbral y la lógica de la alerta para distinguir anomalías estructurales de variaciones estacionales?</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMA 5 ═══════════════════ -->
+<div class="week-panel" id="panel-5">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(255,77,180,.12);color:#f472b6">05</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 05 · Estadística aplicada</div>
+      <div class="wk-title">Estadística para la toma de decisiones</div>
+      <div class="wk-desc">No se trata de p-valores — se trata de cuánta evidencia necesitas para cambiar de curso. La estadística es el lenguaje de la incertidumbre ejecutiva.</div>
+      <div class="tag-row">
+        <span class="tag">Muestreo y error</span>
+        <span class="tag">t de Student · U Mann-Whitney · χ²</span>
+        <span class="tag">Intervalos de confianza para KPIs</span>
+        <span class="tag">Storytelling: sesgos y falacias</span>
+        <span class="tag" style="color:#f472b6;border-color:rgba(244,114,182,.3)">EP · Cuestionario</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid #f472b6">
+      <div class="card-label">Logro del tema</div>
+      <h4>Describe conceptos básicos de muestreo, pruebas estadísticas e intervalos de confianza para la toma de decisiones</h4>
+      <ul>
+        <li>Estimar el tamaño de muestra para un caso práctico simple</li>
+        <li>Aplicar 1 prueba estadística (t, U Mann-Whitney o χ²) e interpretar el resultado en lenguaje claro</li>
+        <li>Calcular el intervalo de confianza de 1 KPI e interpretar su impacto en la decisión</li>
+        <li>Elaborar una narrativa de 1-2 min basada en evidencias evitando sesgos y falacias</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Caso de negocio — E-commerce</div>
+      <h4>Rappi Perú: ¿el nuevo diseño de la app aumenta el conversion rate?</h4>
+      <p>El equipo de producto de Rappi lanzó un A/B test del nuevo flujo de checkout: 40,000 usuarios en control (diseño actual), 40,000 en variante (nuevo diseño). Después de 3 semanas, la variante muestra +5.1% en conversión. El CPO quiere lanzar mañana. ¿Es suficiente evidencia estadística?</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> evaluar si el resultado es estadísticamente significativo y prácticamente relevante para el negocio.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Casos reales de negocio</div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-pink">🧪</div>
+      <div><div class="case-co">Tech · Global · Caso clásico de p-hacking</div>
+      <div class="case-ti">El A/B test que una empresa de software revisó 20 veces hasta encontrar un resultado "significativo"</div></div>
+    </div>
+    <div class="case-body">
+      <p>Un equipo de producto revisó diariamente su A/B test durante 4 semanas. En el día 12 el p-value llegó a 0.049. Detuvieron el test y lanzaron la feature. Tres meses después, la feature fue revertida porque la métrica volvió a la línea base: el resultado había sido ruido estadístico amplificado por el sesgo de selección temporal (pararon cuando favorecía su hipótesis).</p>
+      <p>Este fenómeno tiene nombre: <strong>p-hacking</strong> o "tortura de datos". La probabilidad de encontrar un falso positivo aumenta dramáticamente si revisas el test más de una vez antes de que concluya.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Definir el tamaño de muestra y la duración del test <strong>antes</strong> de empezar, no durante. Un p=0.04 después de 20 revisiones no vale lo mismo que un p=0.04 en una sola medición final. La significancia estadística no es un destino — es un proceso con reglas previas.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-purple">🏥</div>
+      <div><div class="case-co">Salud · Perú · 2020</div>
+      <div class="case-ti">La falacia del superviviente en las estadísticas de mortalidad por COVID en Perú</div></div>
+    </div>
+    <div class="case-body">
+      <p>En los primeros meses de la pandemia, algunos análisis mostraban que los pacientes con ciertas comorbilidades tenían tasas de mortalidad similares a los pacientes sin comorbilidades. El error: el análisis solo incluía pacientes hospitalizados. Los pacientes graves sin comorbilidades ya habían fallecido antes de ser hospitalizados — no estaban en la muestra. Era la <strong>falacia del superviviente</strong> aplicada a datos médicos.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Siempre preguntar "¿quién no está en este dataset?" antes de concluir. Las muestras convenientes (hospitalizados, clientes activos, empleados que no renunciaron) tienen sesgos de selección sistemáticos que invalidan las conclusiones si no se reconocen explícitamente.</div></div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"El A/B test que casi costó el producto"</h5><p>p-hacking en vivo: simular en pantalla cómo el p-value fluctúa si revisas el test cada día. ¿A qué día habrías declarado significancia? El aula vota — y casi todos caen en la trampa.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Análisis del A/B test de Rappi</h5><p>Calcular significancia estadística e IC. Aplicar prueba de proporciones. Determinar si +5.1% es estadísticamente significativo Y prácticamente relevante (¿cuánto revenue adicional representa?). Verificar balance de grupos.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>Pitch de 1-2 min al CPO: ¿lanzamos o no?</h5><p>Cada equipo hace su pitch con Canva o slides. El CPO (docente) pregunta: "¿y si te digo que mañana tenemos que decidir sí o no?" Practicar la presión ejecutiva real.</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real (significancia ≠ relevancia):</strong> Un aumento del 0.3% en conversión puede ser estadísticamente significativo con 1M de usuarios — pero puede no cubrir el costo de implementación y mantenimiento de la feature. El analista debe comunicar <em>ambas</em> dimensiones: ¿es real? ¿importa?</div></div>
+
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema5</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T5</div><div class="lab-title">Estadística aplicada y storytelling de decisiones</div></div>
+      <div class="lab-tool">Python · Jupyter · pandas · NumPy · Canva</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l5','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l5','python')">Python</div>
+      <div class="lab-tab" onclick="switchTab(this,'l5','entregables')">Entregables</div>
+    </div>
+    <div id="l5-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div>Descargar dataset. <strong>Estimar el tamaño de muestra</strong> necesario para detectar una diferencia del 5% en conversión con α=0.05 y potencia del 80%. Documentar cada parámetro.</div></li>
+        <li><div class="step-n">2</div><div><strong>Verificar balance del test:</strong> ¿los grupos control y variante son comparables en edad, región y tipo de dispositivo? Si hay desbalance, documentarlo como limitación.</div></li>
+        <li><div class="step-n">3</div><div><strong>Prueba estadística:</strong> aplicar 1 prueba adecuada al tipo de variable (proporción → prueba Z; continua normal → t de Student; no normal → U Mann-Whitney). Interpretar el resultado en lenguaje ejecutivo, no técnico.</div></li>
+        <li><div class="step-n">4</div><div><strong>Intervalo de confianza del KPI:</strong> calcular IC al 95% del conversion rate de la variante. ¿El límite inferior del IC es rentable para el negocio?</div></li>
+        <li><div class="step-n">5</div><div><strong>Storytelling:</strong> elaborar una narrativa de 1-2 minutos en Canva con máximo 3 slides. Regla: la recomendación va en el primer slide, la evidencia después.</div></li>
+        <li><div class="step-n">6</div><div>Exportar evidencias: PDF + notebook ejecutado + slides de Canva (link o captura).</div></li>
+      </ul>
+    </div>
+    <div id="l5-python" class="lab-content">
+<div class="code-block"><span class="kw">from</span> scipy <span class="kw">import</span> stats
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">'ab_test_rappi.csv'</span>)
+
+control  = df[df[<span class="str">'grupo'</span>]==<span class="str">'control'</span>][<span class="str">'convirtio'</span>]
+variante = df[df[<span class="str">'grupo'</span>]==<span class="str">'variante'</span>][<span class="str">'convirtio'</span>]
+
+cr_c = control.<span class="fn">mean</span>()
+cr_v = variante.<span class="fn">mean</span>()
+<span class="fn">print</span>(<span class="str">f"Control: {cr_c:.3%} | Variante: {cr_v:.3%}"</span>)
+<span class="fn">print</span>(<span class="str">f"Lift: {(cr_v/cr_c-1):.2%}"</span>)
+
+<span class="cm"># Prueba de proporciones</span>
+n_c, n_v = <span class="fn">len</span>(control), <span class="fn">len</span>(variante)
+p_pool = (control.<span class="fn">sum</span>() + variante.<span class="fn">sum</span>()) / (n_c + n_v)
+se = (p_pool*(1-p_pool)*(1/n_c+1/n_v))**0.5
+z = (cr_v - cr_c) / se
+p_val = 2*(1 - stats.norm.<span class="fn">cdf</span>(<span class="fn">abs</span>(z)))
+<span class="fn">print</span>(<span class="str">f"p-value: {p_val:.4f} | ¿Significativo? {p_val &lt; 0.05}"</span>)
+
+<span class="cm"># Intervalo de confianza del lift</span>
+diff = cr_v - cr_c
+ci = 1.96 * se
+<span class="fn">print</span>(<span class="str">f"IC 95%: [{diff-ci:.4f}, {diff+ci:.4f}]"</span>)</div>
+    </div>
+    <div id="l5-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema5_ApellidoNombre.pdf — estimación de muestra + prueba + IC + 2 hallazgos + 2 limitaciones (sesgos identificados).</div></li>
+        <li><div class="step-n">🐍</div><div><strong>Python:</strong> notebook .ipynb ejecutado con todas las celdas y conclusiones en Markdown. Dependencias declaradas en la primera celda.</div></li>
+        <li><div class="step-n">🎨</div><div><strong>Storytelling:</strong> link de Canva o capturas de los 3 slides con la narrativa de recomendación al CPO.</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Encuesta Nacional de Hogares (ENAHO)</h4><p>Datos de hogares peruanos con variables continuas y categóricas. Ideal para pruebas t (ingreso por región) y χ² (acceso a servicios por categoría).</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>A/B Testing Dataset — E-commerce</h4><p>A/B test de e-commerce real con grupos control/variante, conversiones, revenue por sesión y dispositivo. Incluye contaminación de grupos para que los estudiantes la detecten.</p><a href="https://www.kaggle.com/datasets/zhangluyuan/ab-testing" target="_blank">↗ Kaggle: A/B Testing Dataset</a></div>
+    <div><div class="card-label">Desafíos estadísticos incluidos</div><p>→ Usuarios asignados a ambos grupos (error de diseño)</p><p>→ Efecto heterogéneo por dispositivo (mobile vs desktop)</p><p>→ Test detenido prematuramente (p-hacking simulado)</p><p>→ Muestra desbalanceada por región</p></div>
+  </div>
+
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Data Futurology — "Experimentación en empresas tech"</h5><a href="https://www.datafuturology.com" target="_blank">datafuturology.com</a><div class="res-use">Inicio: debate sobre cómo empresas reales toman decisiones con A/B tests imperfectos. ¿Cuánta evidencia es suficiente?</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>StatQuest — "p-values clearly explained" (subtítulos español)</h5><a href="https://www.youtube.com/@statquest" target="_blank">youtube.com/@statquest</a><div class="res-use">Antes del lab: ver para desmitificar el p-value. Los estudiantes deben saber qué dice y qué NO dice un p=0.04.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>ethen8181 / machine-learning (A/B testing notebooks)</h5><a href="https://github.com/ethen8181/machine-learning/tree/master/ab_tests" target="_blank">github.com/ethen8181/machine-learning</a><div class="res-use">Tarea: explorar el notebook de Bayesian A/B testing como alternativa al enfoque frecuentista del lab.</div></div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 5</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 05 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Interpretación:</strong> El A/B test muestra p=0.03 con un lift del +0.9% en conversión. El CPO dice "es significativo, lanzamos mañana". ¿Qué preguntas harías antes de dar tu aprobación? ¿Qué información falta para saber si el lift es prácticamente relevante para el negocio de Rappi Perú?</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Diseño:</strong> Quieres comparar el ingreso promedio de clientes Premium vs clientes Regular para decidir si lanzar un programa de lealtad diferenciado. ¿Qué prueba estadística usarías? ¿Cómo verificarías si aplica una prueba paramétrica (t de Student) o no paramétrica (U Mann-Whitney)? Describe el proceso, no solo la respuesta.</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Storytelling:</strong> Tu análisis concluye que el nuevo diseño de checkout SÍ mejora la conversión con significancia estadística, pero el IC al 95% del lift es [+0.2%, +9.8%]. El gerente quiere saber si "vale la pena lanzar". ¿Cómo comunicas la incertidumbre de ese IC en una narrativa de negocio sin usar lenguaje técnico? ¿Qué escenario conservador y optimista presentarías?</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMA 6 ═══════════════════ -->
+<div class="week-panel" id="panel-6">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(251,146,60,.12);color:#fb923c">06</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 06 · Publicación y gobernanza</div>
+      <div class="wk-title">Publicación, seguridad y reproducibilidad</div>
+      <div class="wk-desc">Un análisis que no puede ser reproducido ni compartido de forma segura no existe profesionalmente. La gobernanza de datos es una ventaja competitiva.</div>
+      <div class="tag-row">
+        <span class="tag">Publicación y embebido de dashboards</span>
+        <span class="tag">RLS y roles de seguridad</span>
+        <span class="tag">Reproducibilidad y control de versiones</span>
+        <span class="tag">Data lineage y metadatos</span>
+        <span class="tag" style="color:#fb923c;border-color:rgba(251,146,60,.3)">EP · Cuestionario</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid #fb923c">
+      <div class="card-label">Logro del tema</div>
+      <h4>Identifica mecanismos de publicación, seguridad y control de acceso a dashboards para proteger la información analizada</h4>
+      <ul>
+        <li>Publicar un dashboard en Power BI Service y compartir vista de solo lectura</li>
+        <li>Configurar 2 roles con accesos diferenciados usando RLS (Row-Level Security)</li>
+        <li>Reproducir el análisis en notebook guiado o documentar el flujo completo</li>
+        <li>Completar plantilla de metadatos y data lineage con trazabilidad de origen</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent2)">
+      <div class="card-label">Caso de negocio — Minería</div>
+      <h4>Cerro Verde: publicar el análisis de seguridad laboral para el directorio sin exponer datos sensibles</h4>
+      <p>El equipo de HSE de Compañía Minera Cerro Verde necesita publicar el análisis de incidentes del último año al directorio en Lima, a los supervisores en Arequipa y al sindicato. Cada audiencia debe ver solo la información que le corresponde. Los datos incluyen RUT de trabajadores y diagnósticos médicos.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> publicar con seguridad, anonimización y trazabilidad completa.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Casos reales de negocio</div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-red">🔐</div>
+      <div><div class="case-co">Finanzas · Latinoamérica · 2023</div>
+      <div class="case-ti">Startup peruana expuso datos de 80,000 clientes por un notebook con credenciales en GitHub público</div></div>
+    </div>
+    <div class="case-body">
+      <p>Una startup de créditos digitales en Perú subió un notebook de análisis a GitHub para compartirlo con su equipo. El notebook contenía, en una celda de configuración, las credenciales de la base de datos de producción y la API key del proveedor de pagos. El repositorio era público. En menos de 6 horas, un bot de escaneo de GitHub encontró las credenciales. La brecha afectó a 80,000 clientes.</p>
+      <p>El costo: S/ 2.1M en multas de la SBS, pérdida de clientes y 8 meses de auditoría regulatoria.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección práctica:</strong> Nunca incluir credenciales, API keys o conexiones a BD en el código. Usar variables de entorno (<code>.env</code>) y agregar el archivo <code>.env</code> al <code>.gitignore</code> antes del primer commit. Revisar el historial de Git — <strong>un secret commiteado y luego eliminado sigue en el historial</strong>.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-purple">🔄</div>
+      <div><div class="case-co">Consultoría · Global · Caso recurrente en analítica</div>
+      <div class="case-ti">El análisis que nadie pudo reproducir 6 meses después — y costó rehacerlo desde cero</div></div>
+    </div>
+    <div class="case-body">
+      <p>Un equipo de analítica de una empresa de consumo masivo entregó un informe crítico sobre expansión de mercado. Seis meses después, el CEO quiso actualizar el análisis con datos nuevos. El analista original ya no trabajaba en la empresa. El notebook tenía rutas absolutas del computador personal del ex-analista, sin requirements.txt, con variables sin nombre descriptivo y sin ninguna celda de Markdown explicativa. Reconstruir el análisis tomó 3 semanas.</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Un análisis es reproducible cuando <strong>alguien más puede ejecutarlo en 10 minutos sin preguntar nada</strong>. Esto requiere: rutas relativas, requirements.txt, seed fijo, Markdown explicativo y convención de nombres estándar.</div></div>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"El notebook que costó S/ 2 millones"</h5><p>El caso de la startup peruana con credenciales en GitHub. ¿Alguno de ustedes tiene archivos con passwords en su repositorio? Pausa. Verificar en vivo con el docente.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Refactoring + publicación segura</h5><p>Tomar el notebook del tema anterior. Refactorizarlo: documentar, anonimizar PII, configurar RLS en Power BI, publicar en Service. Antes y después visible en pantalla.</p></div>
+    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>Demo: cada rol ve lo que debe ver</h5><p>En vivo: cambiar entre el rol "Directorio" y el rol "Supervisor Turno A" en el mismo dashboard. El RLS funciona — o no. La clase evalúa.</p></div>
+  </div>
+
+  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real:</strong> Publicar en Power BI Service sin configurar RLS, pensando que "solo comparto el link con el jefe". Un link de Power BI Service sin RLS da acceso a todos los datos del modelo a cualquiera que tenga el link y una cuenta Microsoft.</div></div>
+
+  <div class="sec-label">Laboratorio — UAIN1008V_Tema6</div>
+  <div class="lab-wrap">
+    <div class="lab-hdr">
+      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T6</div><div class="lab-title">Publicación segura y reproducibilidad</div></div>
+      <div class="lab-tool">Power BI Desktop · Service · Jupyter · Git · Google Docs</div>
+    </div>
+    <div class="lab-tabs">
+      <div class="lab-tab active" onclick="switchTab(this,'l6','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l6','python')">Python reproducible</div>
+      <div class="lab-tab" onclick="switchTab(this,'l6','entregables')">Entregables</div>
+    </div>
+    <div id="l6-steps" class="lab-content active">
+      <ul class="step-list">
+        <li><div class="step-n">1</div><div><strong>Auditoría del notebook anterior:</strong> aplicar checklist de reproducibilidad de 10 puntos (rutas relativas, seed, requirements, Markdown, nombres descriptivos). Documentar puntuación inicial.</div></li>
+        <li><div class="step-n">2</div><div><strong>Publicación:</strong> publicar el dashboard del Tema 4 o 5 en Power BI Service y generar un link de "vista de solo lectura" para compartir.</div></li>
+        <li><div class="step-n">3</div><div><strong>RLS (Row-Level Security):</strong> configurar 2 roles con accesos diferenciados. Ejemplo: "Directorio" (ve todo), "Supervisor Lima" (solo ve datos de Lima). Verificar con "Ver como rol" en Power BI Desktop.</div></li>
+        <li><div class="step-n">4</div><div><strong>Reproducibilidad:</strong> refactorizar el notebook con rutas relativas, requirements.txt, seed fijo y celdas Markdown explicativas para cada sección.</div></li>
+        <li><div class="step-n">5</div><div><strong>Data lineage:</strong> completar plantilla de metadatos en Google Docs con: origen del dato, fecha de carga, transformaciones aplicadas, responsable, licencia y restricciones de uso.</div></li>
+        <li><div class="step-n">6</div><div>Exportar evidencias: PDF + link Power BI Service + notebook refactorizado + plantilla de lineage completada.</div></li>
+      </ul>
+    </div>
+    <div id="l6-python" class="lab-content">
+<div class="code-block"><span class="cm"># Notebook reproducible — estructura estándar</span>
+
+<span class="cm"># === SECCIÓN 1: CONFIGURACIÓN ===</span>
+<span class="kw">import</span> os, random
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+np.random.<span class="fn">seed</span>(42)  <span class="cm"># OBLIGATORIO para reproducibilidad</span>
+random.<span class="fn">seed</span>(42)
+
+<span class="cm"># Rutas RELATIVAS (nunca absolutas)</span>
+DATA_PATH = <span class="str">'../data/ventas_clean.csv'</span>  <span class="cm"># relativa al notebook</span>
+OUTPUT_PATH = <span class="str">'../outputs/'</span>
+
+<span class="cm"># === SECCIÓN 2: ANONIMIZACIÓN DE PII ===</span>
+<span class="kw">import</span> hashlib
+
+<span class="kw">def</span> <span class="fn">anonimizar</span>(valor):
+    <span class="str">"""Hash SHA-256 irreversible de identificadores personales."""</span>
+    <span class="kw">return</span> hashlib.<span class="fn">sha256</span>(<span class="fn">str</span>(valor).<span class="fn">encode</span>()).<span class="fn">hexdigest</span>()[:12]
+
+df[<span class="str">'id_trabajador_anon'</span>] = df[<span class="str">'dni_trabajador'</span>].<span class="fn">apply</span>(anonimizar)
+df = df.<span class="fn">drop</span>(columns=[<span class="str">'dni_trabajador'</span>, <span class="str">'nombre'</span>, <span class="str">'telefono'</span>])
+
+<span class="cm"># === SECCIÓN 3: METADATA DE EXPORTACIÓN ===</span>
+<span class="kw">import</span> json
+meta = {
+    <span class="str">"version"</span>: <span class="str">"1.0"</span>,
+    <span class="str">"fecha_generacion"</span>: pd.Timestamp.<span class="fn">now</span>().<span class="fn">isoformat</span>(),
+    <span class="str">"filas_output"</span>: <span class="fn">len</span>(df),
+    <span class="str">"pii_anonimizado"</span>: <span class="kw">True</span>,
+    <span class="str">"columnas_eliminadas"</span>: [<span class="str">"dni_trabajador"</span>, <span class="str">"nombre"</span>, <span class="str">"telefono"</span>]
+}
+<span class="kw">with</span> <span class="fn">open</span>(OUTPUT_PATH + <span class="str">'metadata.json'</span>, <span class="str">'w'</span>) <span class="kw">as</span> f:
+    json.<span class="fn">dump</span>(meta, f, indent=2, ensure_ascii=<span class="kw">False</span>)</div>
+    </div>
+    <div id="l6-entregables" class="lab-content">
+      <ul class="step-list">
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema6_ApellidoNombre.pdf — checklist de reproducibilidad + capturas de RLS + análisis de lineage.</div></li>
+        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> .pbix con RLS configurado + link de Power BI Service publicado.</div></li>
+        <li><div class="step-n">🐍</div><div><strong>Python:</strong> notebook refactorizado con requirements.txt, seed, Markdown y sin rutas absolutas.</div></li>
+        <li><div class="step-n">📋</div><div><strong>Google Docs:</strong> plantilla de data lineage y metadatos completada (con origen, transformaciones, responsable, licencia).</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataset-card">
+    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Accidentes de Trabajo MTPE</h4><p>Registros de accidentes laborales reportados al Ministerio de Trabajo del Perú. Variables: sector, tipo de accidente, región, días perdidos. Requiere anonimización práctica.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
+    <div><div class="card-label">Alternativa</div><h4>OSHA Severe Injury Dataset (EE.UU.)</h4><p>Registros de accidentes laborales graves reportados a OSHA. 100K+ registros con tipo de lesión, industria, estado, días perdidos. Ideal para practicar anonimización.</p><a href="https://www.osha.gov/severeinjury/data" target="_blank">↗ osha.gov/severeinjury/data</a></div>
+    <div><div class="card-label">Ejercicios de gobernanza incluidos</div><p>→ Identificar campos PII (nombre, DNI, fecha de lesión exacta)</p><p>→ Anonimizar sin perder análisis agregado</p><p>→ Diseñar RLS por sector o región</p><p>→ Documentar lineage desde fuente OSHA hasta dashboard</p></div>
+  </div>
+
+  <div class="sec-label">Recursos</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Data Futurology — "Gobernanza de datos en la práctica"</h5><a href="https://www.datafuturology.com" target="_blank">datafuturology.com</a><div class="res-use">Cierre de módulo: conectar las buenas prácticas técnicas con la estrategia de datos organizacional y el cumplimiento regulatorio.</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>DotCSV — "Ética en IA y datos: casos reales" (español)</h5><a href="https://www.youtube.com/@DotCSV" target="_blank">youtube.com/@DotCSV</a><div class="res-use">Inicio: debate sobre la responsabilidad del analista al publicar datos con PII y las consecuencias regulatorias en Perú (Ley 29733).</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>drivendata / cookiecutter-data-science</h5><a href="https://github.com/drivendata/cookiecutter-data-science" target="_blank">github.com/drivendata/cookiecutter-data-science</a><div class="res-use">Tarea: usar esta plantilla para estructurar el proyecto final del Tema 7. Es el estándar de la industria para proyectos de datos reproducibles.</div></div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 6</div>
+  <div class="quiz-block">
+    <div class="quiz-hdr">Tema 06 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Reproducibilidad:</strong> Un colega ejecuta tu notebook en su computadora y obtiene resultados diferentes en la media del KPI de ventas. Lista 4 causas posibles y la solución técnica para cada una. ¿Cuál es la más probable si usaste pandas con GroupBy y no fijaste el orden de las filas?</div></div>
+    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Seguridad RLS:</strong> Tu empresa tiene tres audiencias para el mismo dashboard: Gerencia General (ve todo), Gerente de Lima (solo Lima), Gerente de Arequipa (solo Arequipa). Describe exactamente cómo configurarías el RLS en Power BI, incluyendo la tabla de roles, la expresión DAX de filtro y cómo verificarías que funciona correctamente antes de publicar.</div></div>
+    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Ética y lineage:</strong> Tu dataset de accidentes laborales incluye DNI, nombre completo, diagnóstico médico y fecha exacta del accidente. Debes publicarlo para análisis estadístico del sector de minería. ¿Qué campos anonimizas, cuáles pseudonimizas y cuáles eliminas? ¿Qué cláusulas incluirías en el data lineage respecto a licencia de uso y restricciones de reidentificación?</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TEMA 7 ═══════════════════ -->
+<div class="week-panel" id="panel-7">
+  <div class="wk-header">
+    <div class="wk-num-badge" style="background:rgba(167,139,250,.12);color:#a78bfa">07</div>
+    <div class="wk-info">
+      <div class="wk-eyebrow">Tema 07 · Proyecto integrador · EF</div>
+      <div class="wk-title">Proyecto MVP analítico por carrera</div>
+      <div class="wk-desc">Todo lo aprendido en un solo pipeline. Construyes tu primer producto analítico completo: de la definición del problema al dashboard en producción, con criterios éticos declarados.</div>
+      <div class="tag-row">
+        <span class="tag">Levantamiento de requerimientos</span>
+        <span class="tag">ETL + Dashboard MVP</span>
+        <span class="tag">Validación con usuario</span>
+        <span class="tag">Checklist ético</span>
+        <span class="tag" style="color:#a78bfa;border-color:rgba(167,139,250,.3)">EF · 60% · Presentación final</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl amber">
+    <strong>¿Qué es un MVP analítico?</strong> El análisis más simple que genera una decisión real. No el más completo ni el más bonito — el que responde la pregunta correcta con la evidencia suficiente, comunicado de forma que el usuario lo entienda y actúe sobre él.
+  </div>
+
+  <!-- Contexto del EF -->
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid #a78bfa">
+      <div class="card-label">Logro del tema</div>
+      <h4>Aplica técnicas básicas de análisis en la construcción de un MVP analítico para resolver un problema contextualizado de su carrera</h4>
+      <ul>
+        <li>Definir objetivo de negocio, usuarios, KPIs y dataset con criterios éticos</li>
+        <li>Implementar ETL mínimo reproducible y dashboard funcional en Power BI</li>
+        <li>Validar el análisis con al menos 2 mejoras basadas en feedback</li>
+        <li>Presentar 5 min con demo en vivo + declaración de limitaciones y responsabilidades</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent)">
+      <div class="card-label">Industrias disponibles por carrera</div>
+      <ul>
+        <li><strong>Ing. de Minas:</strong> seguridad laboral, productividad por turno, control de leyes de mineral</li>
+        <li><strong>Ing. Industrial:</strong> eficiencia de línea, OEE, tiempos de ciclo, scrap rate</li>
+        <li><strong>Ing. de Sistemas:</strong> logs de sistema, uptime, tickets de soporte, SLA</li>
+        <li><strong>Ing. Empresarial:</strong> ventas, margen, rotación de inventario, satisfacción</li>
+        <li><strong>Ing. Ambiental:</strong> emisiones, cumplimiento normativo, monitoreo de parámetros</li>
+        <li><strong>Ing. Agroindustrial:</strong> rendimiento de cultivos, calidad de producto, trazabilidad</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Rúbrica EF -->
+  <div class="sec-label">Rúbrica de evaluación — EF (60% del curso)</div>
+  <div class="card">
+    <div class="card-label">Evaluación final · Semana 8 · Presentación + Informe + Laboratorios</div>
+    <table class="rubric-table">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Criterio de excelencia (logro completo)</th>
+          <th>Mínimo aprobatorio</th>
+          <th>Peso EF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ETL reproducible (SQL + Python)</td>
+          <td>Pipeline documentado con validaciones de calidad, rutas relativas, seed fijo y metadata de transformaciones</td>
+          <td>Datos cargados, limpios y sin PII expuesto. Al menos 1 JOIN y 2 KPIs calculados</td>
+          <td>20%</td>
+        </tr>
+        <tr>
+          <td>EDA y análisis estadístico</td>
+          <td>3+ hipótesis planteadas antes del análisis, hallazgos no obvios con evidencia visual, al menos 1 prueba estadística aplicada</td>
+          <td>Estadísticas descriptivas correctas para 5 variables, 2 visualizaciones con hipótesis</td>
+          <td>20%</td>
+        </tr>
+        <tr>
+          <td>Dashboard Power BI</td>
+          <td>RLS implementado, narrativa clara, drill-down funcional, anotaciones contextuales, publicado en Service</td>
+          <td>4 KPIs visibles, 2 filtros de fecha, 1 mapa o gráfico temporal</td>
+          <td>25%</td>
+        </tr>
+        <tr>
+          <td>Presentación ejecutiva (5 min + demo)</td>
+          <td>Responde 1 pregunta de negocio específica, recomendación accionable con impacto estimado, demo en vivo funcional</td>
+          <td>Estructura coherente, hallazgos principales comunicados en lenguaje no técnico</td>
+          <td>20%</td>
+        </tr>
+        <tr>
+          <td>Checklist ético y limitaciones</td>
+          <td>Consentimiento, licencias, minimización, anonimización y sesgos declarados explícitamente. Al menos 2 limitaciones del análisis identificadas</td>
+          <td>Licencia del dataset declarada, PII tratado, 1 limitación identificada</td>
+          <td>15%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Estructura presentación final -->
+  <div class="sec-label">Estructura obligatoria de la presentación (máx 10 slides · 5 min + demo)</div>
+  <div class="three-col">
+    <div class="card"><div class="card-label">Slides 1-3 · El problema</div><ul><li><strong>Slide 1:</strong> Pregunta de negocio específica + industria + usuario final</li><li><strong>Slide 2:</strong> Dataset: fuente, licencia, periodo, problemas de calidad encontrados</li><li><strong>Slide 3:</strong> Metodología en 1 visual (pipeline ETL → análisis → dashboard)</li></ul></div>
+    <div class="card"><div class="card-label">Slides 4-7 · Los hallazgos</div><ul><li><strong>Slide 4:</strong> Hallazgo #1 con evidencia visual (gráfico del dashboard)</li><li><strong>Slide 5:</strong> Hallazgo #2 con evidencia visual</li><li><strong>Slide 6:</strong> Hallazgo #3 con evidencia visual</li><li><strong>Slide 7:</strong> Demo en vivo del dashboard (no captura — el dashboard real)</li></ul></div>
+    <div class="card"><div class="card-label">Slides 8-10 · Cierre</div><ul><li><strong>Slide 8:</strong> Recomendación accionable + impacto estimado en lenguaje de negocio</li><li><strong>Slide 9:</strong> Limitaciones del análisis + checklist ético declarado</li><li><strong>Slide 10:</strong> ¿Qué haría con más tiempo/datos? + preguntas</li></ul></div>
+  </div>
+
+  <!-- Casos + datasets por industria -->
+  <div class="sec-label">Casos y datasets sugeridos por carrera</div>
+
+  <div class="case-card">
+    <div class="case-top"><div class="case-icon ci-amber">⛏️</div><div><div class="case-co">Ingeniería de Minas</div><div class="case-ti">Análisis de incidentes de seguridad y productividad por turno en operación minera</div></div></div>
+    <div class="case-body">
+      <p>Dataset: registros de incidentes HSE + producción diaria por turno. KPIs: TRIFR (tasa de incidentes), toneladas procesadas/turno, ratio incidentes/producción. Pregunta: ¿el turno nocturno tiene mayor tasa de incidentes por ton procesada? ¿Qué factor lo explica?</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Dataset:</strong> OSHA Severe Injury Data (osha.gov) + adaptar con datos del MTPE Perú. Consideración ética: anonimizar datos de trabajadores con SHA-256, no reportar edades exactas &lt; 18 años.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top"><div class="case-icon ci-blue">🏭</div><div><div class="case-co">Ingeniería Industrial / Empresarial</div><div class="case-ti">OEE y análisis de causas de parada no planificada en línea de producción</div></div></div>
+    <div class="case-body">
+      <p>Dataset: registros de producción por turno con tiempos de parada categorizados. KPIs: OEE (disponibilidad × rendimiento × calidad), top 3 causas de parada, costo estimado de parada/hora. Pregunta: ¿qué causa de parada tiene mayor impacto en el OEE y en qué turno ocurre más?</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Dataset:</strong> Steel Industry Energy Consumption (gob.pe/datosabiertos) + Manufacturing Defects Dataset de Kaggle. El dataset no tiene PII — el checklist ético se enfoca en licencias y trazabilidad de KPIs.</div></div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-top"><div class="case-icon ci-green">🌿</div><div><div class="case-co">Ingeniería Ambiental / Agroindustrial</div><div class="case-ti">Monitoreo de calidad del agua y cumplimiento de LMP en cuenca Mantaro</div></div></div>
+    <div class="case-body">
+      <p>Dataset: registros de monitoreo de calidad de agua (pH, turbidez, metales pesados) por estación y mes. KPIs: % de muestras fuera de LMP (Límites Máximos Permisibles), tendencia de parámetros críticos, mapa de calor por estación de monitoreo. Pregunta: ¿qué estaciones superan los LMP con mayor frecuencia y en qué meses?</p>
+      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Dataset:</strong> OEFA — datos de monitoreo ambiental (gob.pe/datosabiertos) + ANA (Autoridad Nacional del Agua). Consideración ética: los datos de calidad ambiental son públicos por mandato legal — declarar la licencia y la fecha de vigencia de los LMP aplicados.</div></div>
+    </div>
+  </div>
+
+  <!-- Checklist ético -->
+  <div class="sec-label">Checklist ético obligatorio del proyecto (Subtema 7.4 del sílabo)</div>
+  <div class="card">
+    <div class="card-label">Debe declararse en el informe y en el Slide 9 de la presentación</div>
+    <ul>
+      <li><strong>Consentimiento:</strong> ¿los datos tienen licencia abierta o se obtuvo autorización? Declarar URL de licencia.</li>
+      <li><strong>Minimización:</strong> ¿se usan solo las columnas necesarias para el análisis? Documentar columnas eliminadas.</li>
+      <li><strong>Anonimización:</strong> ¿se eliminaron o hashearon todos los identificadores directos (DNI, nombre, teléfono)?</li>
+      <li><strong>Pseudonimización:</strong> ¿los IDs internos permiten reidentificación cruzada con otras fuentes? Evaluar el riesgo.</li>
+      <li><strong>Retención:</strong> ¿por cuánto tiempo se conservarán los datos del proyecto? ¿Dónde se almacenan?</li>
+      <li><strong>Trazabilidad:</strong> ¿se documentó el origen de cada campo del dataset (data lineage)?</li>
+      <li><strong>Sesgos:</strong> ¿qué grupos podrían estar subrepresentados o ausentes en el dataset? ¿Cómo afecta esto a las conclusiones?</li>
+      <li><strong>Limitaciones declaradas:</strong> al menos 2 limitaciones del análisis que el usuario del dashboard debe conocer antes de tomar decisiones.</li>
+    </ul>
+  </div>
+
+  <!-- Recursos -->
+  <div class="sec-label">Recursos para el proyecto final</div>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Hacia la IA — "Proyectos de datos que generan impacto real"</h5><a href="https://open.spotify.com/show/hacialaIA" target="_blank">Spotify → Hacia la IA</a><div class="res-use">Inspiración antes del sprint: escuchar para entender qué hace que un proyecto analítico sea memorable y accionable.</div></div>
+    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Código Máquina — "Proyecto de datos end-to-end completo" (español)</h5><a href="https://www.youtube.com/@CodigoMaquina" target="_blank">youtube.com/@CodigoMaquina</a><div class="res-use">Referencia de estructura: ver para entender cómo se organiza un proyecto real antes de empezar el propio.</div></div>
+    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>drivendata / cookiecutter-data-science</h5><a href="https://github.com/drivendata/cookiecutter-data-science" target="_blank">github.com/drivendata/cookiecutter-data-science</a><div class="res-use">Plantilla obligatoria para el proyecto final. Estructura estándar de la industria: data/, notebooks/, outputs/, src/.</div></div>
+  </div>
+
+  <!-- Nota final -->
+  <div class="hl blue" style="margin-top:24px">
+    <strong>Requisito para rendir el EF:</strong> Según el sílabo UAIN1008R, para rendir la evaluación final es requisito haber aprobado las evaluaciones de <em>todos</em> los temas (EP Temas 1 al 6). El EF representa el 60% de la nota final: 60% informe + proyecto y 40% actividades de laboratorio realizadas durante el curso.
+  </div>
+</div>
+
+</div><!-- /course-body -->
+
 <script>
+function showWeek(n) {
+  document.querySelectorAll('.week-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.week-pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.getElementById('pill-' + n).classList.add('active');
+  document.querySelectorAll('.nav-link')[n-1].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
 function switchTab(el, labId, tabName) {
   const wrap = el.closest('.lab-wrap');
   wrap.querySelectorAll('.lab-tab').forEach(t => t.classList.remove('active'));
@@ -87,6 +1535,5 @@ function switchTab(el, labId, tabName) {
   if (target) target.classList.add('active');
 }
 </script>
-
 </body>
 </html>
