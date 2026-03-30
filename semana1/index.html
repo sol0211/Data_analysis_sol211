@@ -1590,7 +1590,22 @@ function showWeek(n) {
   document.getElementById('pill-' + n).classList.add('active');
   document.querySelectorAll('.nav-link')[n-1].classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
+  // Update URL without reload so bookmarks/links reflect current week
+  const url = new URL(window.location.href);
+  url.searchParams.set('week', n);
+  history.replaceState(null, '', url.toString());
 }
+
+// On load: read ?week=N from URL and activate that panel
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const w = parseInt(params.get('week'));
+  if (w >= 1 && w <= 7) {
+    document.addEventListener('DOMContentLoaded', function() {
+      showWeek(w);
+    });
+  }
+})();
 
 function switchTab(el, labId, tabName) {
   const wrap = el.closest('.lab-wrap');
