@@ -437,7 +437,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
 
   <!-- Objetivo + Caso -->
   <div class="two-col">
-    <div class="card" style="border-left:3px solid var(--accent)">
+    <div class="card" style="border-left: 3px solid var(--accent)">
       <div class="card-label">Logro del tema</div>
       <h4>Identifica procesos de ingesta, perfilado y control de calidad para asegurar el uso adecuado del dato en el análisis</h4>
       <ul>
@@ -447,11 +447,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
         <li>Construir un diccionario de datos con licencia y uso responsable</li>
       </ul>
     </div>
-    <div class="card" style="border-left:3px solid var(--accent2)">
-      <div class="card-label">Caso de negocio — Retail</div>
-      <h4>Supermercado Wong: las ventas del dashboard no cuadran con contabilidad</h4>
-      <p>El equipo de finanzas de Wong Perú detectó una diferencia de S/ 2.3 millones entre el reporte de ventas del BI y el cierre contable del trimestre. Se sospecha de registros duplicados, precios en cero y productos sin categoría. Te entregan el CSV crudo de cajas del último trimestre.</p>
-      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> diagnosticar el dataset antes de que el CFO presente a directorio en 48 horas.</p>
+  
+    <div class="card" style="border-left: 3px solid var(--accent)">
+      <div class="card-label">Caso de negocio — Salud Pública</div>
+      <h4>IREN Centro: Inconsistencias en el Reporte Nacional de Cáncer</h4>
+      <p>
+        El Ministerio de Salud (MINSA) detectó que las cifras de atenciones oncológicas del IREN Centro no coinciden con los suministros de quimioterapia enviados. Se sospecha de duplicidad en DNIs de pacientes, registros con diagnósticos (CIE-10) vacíos y fechas de atención inconsistentes que alteran los indicadores de mortalidad.
+      </p>
+      <p>
+        <strong>Tu misión:</strong> Realizar el perfilado y control de calidad del dataset crudo para asegurar que el reporte de gestión hospitalaria sea confiable antes de la auditoría nacional en 48 horas.
+      </p>
     </div>
   </div>
 
@@ -486,9 +491,26 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   <!-- Flujo de clase -->
   <div class="sec-label">Flujo de clase</div>
   <div class="flow-row">
-    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"¿Cuánto cuesta un dato malo?"</h5><p>Knight Capital perdió $440M en 45 min por un servidor con datos de configuración desactualizados. IBM estima pérdidas de $3.1T anuales en EE.UU. por mala calidad de datos. Pregunta al aula: ¿cuánto vale un dato incorrecto en tu industria?</p></div>
-    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Demo + lab guiado en Power BI y Python</h5><p>Cargar el CSV del caso Wong. Generar perfil de calidad. Identificar los 5 problemas principales. Aplicar 3 acciones de limpieza justificadas. Construir diccionario de datos con licencia.</p></div>
-    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>¿Qué le dices al CFO en 2 oraciones?</h5><p>Cada equipo sintetiza el problema encontrado y la decisión que cambiaría. ¿Cuánto del diferencial de S/ 2.3M se explica con los problemas encontrados?</p></div>
+    <div class="flow-step">
+      <div class="flow-tag ft-hook">Inicio · 20 min</div>
+      <div class="flow-step-num">01</div>
+      <h5>"El costo del error en salud"</h5>
+      <p>Discusión sobre el impacto de datos oncológicos erróneos: desde diagnósticos mal asignados hasta presupuestos hospitalarios perdidos. ¿Qué pasa si un paciente recibe el tratamiento equivocado por un DNI duplicado?</p>
+    </div>
+  
+    <div class="flow-step">
+      <div class="flow-tag ft-dev">Desarrollo · 60 min</div>
+      <div class="flow-step-num">02</div>
+      <h5>Perfilado y Limpieza en Python</h5>
+      <p>Carga del dataset del IREN Centro. Detección de codificaciones (UTF-8/Latin1). Perfilado de calidad para hallar diagnósticos CIE-10 vacíos y duplicados. Aplicación de limpieza técnica y creación del diccionario de datos.</p>
+    </div>
+  
+    <div class="flow-step">
+      <div class="flow-tag ft-close">Cierre · 10 min</div>
+      <div class="flow-step-num">03</div>
+      <h5>Validación de integridad del reporte</h5>
+      <p>Cada equipo presenta el hallazgo más crítico: ¿Cuántos registros eran inconsistentes y cómo afecta esto al reporte nacional? Conclusión sobre el uso responsable de datos sensibles en salud.</p>
+    </div>
   </div>
 
   <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real en producción:</strong> Eliminar todas las filas con nulos asumiendo que son aleatorios (MCAR), cuando en realidad los nulos en precio_unitario se concentran en la categoría "devoluciones" (MNAR). Eliminarlos distorsiona el revenue neto hasta en un 12%.</div></div>
@@ -498,7 +520,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   <div class="lab-wrap">
     <div class="lab-hdr">
       <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T1</div><div class="lab-title">Ingesta, perfilado y limpieza básica</div></div>
-      <div class="lab-tool">Power BI Desktop · Python (opcional)</div>
+      <div class="lab-tool">Power BI Desktop · Python</div>
     </div>
     <div class="lab-tabs">
       <div class="lab-tab active" onclick="switchTab(this,'l1','steps')">Procedimiento</div>
@@ -517,79 +539,123 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
         <li><div class="step-n">7</div><div><strong>Exportar evidencias:</strong> PDF con procedimiento completo + capturas + hallazgos + reflexión (1-2 páginas).</div></li>
       </ul>
     </div>
-    <div id="l1-python" class="lab-content">
-<div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
-<span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
-
-<span class="cm"># 1. Cargar con encoding correcto</span>
-df = pd.<span class="fn">read_csv</span>(<span class="str">'ventas_wong.csv'</span>, encoding=<span class="str">'latin-1'</span>,
-                parse_dates=[<span class="str">'fecha_venta'</span>],
-                dtype={<span class="str">'codigo_producto'</span>:<span class="str">'str'</span>})
-
-<span class="cm"># 2. Diagnóstico inicial</span>
-<span class="fn">print</span>(df.<span class="fn">info</span>())
-nulos = df.<span class="fn">isnull</span>().<span class="fn">sum</span>() / <span class="fn">len</span>(df) * 100
-<span class="fn">print</span>(nulos[nulos > 0].<span class="fn">sort_values</span>(ascending=<span class="kw">False</span>))
-
-<span class="cm"># 3. Perfil automático de calidad</span>
-profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Reporte Calidad T1"</span>, minimal=<span class="kw">True</span>)
-profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad_T1.html"</span>)
-
-<span class="cm"># 4. Detección de duplicados</span>
-dupes = df.<span class="fn">duplicated</span>(subset=[<span class="str">'id_transaccion'</span>]).<span class="fn">sum</span>()
-<span class="fn">print</span>(<span class="str">f"Duplicados: {dupes}"</span>)
-
-<span class="cm"># 5. Outliers por IQR en precio_unitario</span>
-Q1 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.25)
-Q3 = df[<span class="str">'precio_unitario'</span>].<span class="fn">quantile</span>(0.75)
-IQR = Q3 - Q1
-outliers = df[(df[<span class="str">'precio_unitario'</span>] &lt; Q1-1.5*IQR) |
-              (df[<span class="str">'precio_unitario'</span>] &gt; Q3+1.5*IQR)]
-<span class="fn">print</span>(<span class="str">f"Outliers detectados: {len(outliers)}"</span>)</div>
-    </div>
-    <div id="l1-pbi" class="lab-content">
-      <ul class="step-list">
-        <li><div class="step-n">1</div><div>Power Query: importar CSV y Excel. Revisar tipos detectados automáticamente. Corregir columnas de fecha y precio.</div></li>
-        <li><div class="step-n">2</div><div>Usar "Vista de calidad de columna" y "Vista de distribución" en Power Query para identificar nulos y valores atípicos visualmente.</div></li>
-        <li><div class="step-n">3</div><div>Crear columna calculada: % completitud por columna. Tarjetas: total filas / filas válidas / % completitud global.</div></li>
-        <li><div class="step-n">4</div><div>Histograma de precio_unitario para visualizar distribución y detectar valores imposibles (cero, negativos).</div></li>
-        <li><div class="step-n">5</div><div>Tabla resumen de anomalías: tipo de problema, columna afectada, cantidad de filas, impacto estimado en revenue.</div></li>
-      </ul>
-    </div>
-    <div id="l1-entregables" class="lab-content">
-      <ul class="step-list">
-        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema1_ApellidoNombre.pdf — procedimiento completo con capturas, análisis y reflexión (1-2 páginas).</div></li>
-        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> archivo .pbix con Power Query aplicado + capturas del perfil de calidad.</div></li>
-        <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook .ipynb ejecutado con ydata-profiling + celdas de análisis comentadas.</div></li>
-        <li><div class="step-n">📋</div><div><strong>Diccionario:</strong> Google Sheets o Excel con más de 10 campos + licencia + uso responsable declarado.</div></li>
-      </ul>
-    </div>
+     <div id="l1-python" class="lab-content">
+    <div class="code-block">
+  <span class="kw">import</span> pandas <span class="kw">as</span> pd
+  <span class="kw">from</span> ydata_profiling <span class="kw">import</span> ProfileReport
+  
+  <span class="cm"># 1. Ingesta: Carga con separador ";" y encoding "latin-1" según el notebook</span>
+  ruta = <span class="str">'Atenciones_Oncologicas_IREN_Centro_enero_julio_2024.csv'</span>
+  df = pd.<span class="fn">read_csv</span>(ruta, sep=<span class="str">';'</span>, encoding=<span class="str">'latin-1'</span>)
+  
+  <span class="cm"># 2. Tipado de datos: Fechas y Categorías</span>
+  df[<span class="str">'FECHA_ATENCION'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="str">'FECHA_ATENCION'</span>], format=<span class="str">'%d/%m/%Y'</span>)
+  df[<span class="str">'SEXO'</span>] = df[<span class="str">'SEXO'</span>].<span class="fn">astype</span>(<span class="str">'category'</span>)
+  
+  <span class="cm"># 3. Perfilado Automático (YData Profiling)</span>
+  profile = <span class="fn">ProfileReport</span>(df, title=<span class="str">"Reporte Calidad - IREN Centro"</span>, minimal=<span class="kw">True</span>)
+  profile.<span class="fn">to_file</span>(<span class="str">"reporte_calidad.html"</span>)
+  
+  <span class="cm"># 4. Unicidad: Identificar duplicados parciales (Paciente + Fecha + Servicio)</span>
+  <span class="cm"># Un paciente no debería tener el mismo servicio en la misma fecha registrado dos veces</span>
+  cols_dupe = [<span class="str">'CODIGO_DOCUMENTO_PACIENTE'</span>, <span class="str">'FECHA_ATENCION'</span>, <span class="str">'DESCRIPCION_UPSS'</span>]
+  dupes = df.<span class="fn">duplicated</span>(subset=cols_dupe).<span class="fn">sum</span>()
+  <span class="fn">print</span>(<span class="str">f"Atenciones duplicadas detectadas: {dupes}"</span>)
+  
+  <span class="cm"># 5. Consistencia: Validación de EDAD vs AÑO_NACIMIENTO</span>
+  <span class="cm"># Verificamos si la edad declarada coincide con el año de atención</span>
+  df[<span class="str">'edad_calc'</span>] = df[<span class="str">'ANIO'</span>] - df[<span class="str">'ANIO_NACIMIENTO_PACIENTE'</span>]
+  inconsistentes = df[<span class="fn">abs</span>(df[<span class="str">'EDAD'</span>] - df[<span class="str">'edad_calc'</span>]) > <span class="num">1</span>]
+  <span class="fn">print</span>(<span class="str">f"Registros con edad inconsistente: {len(inconsistentes)}"</span>)
+  
+  <span class="cm"># 6. Detección de Outliers (Menores de 18 años en servicio de adultos)</span>
+  outliers_menores = df[df[<span class="str">'EDAD'</span>] < <span class="num">18</span>]
+  <span class="fn">print</span>(<span class="str">f"Posibles outliers (menores de edad): {len(outliers_menores)}"</span>)</div>
   </div>
+      <div id="l1-entregables" class="lab-content">
+        <ul class="step-list">
+          <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema1_ApellidoNombre.pdf — procedimiento completo con capturas, análisis y reflexión (1-2 páginas).</div></li>
+          <li><div class="step-n">📊</div><div><strong>Power BI:</strong> archivo .pbix con Power Query aplicado + capturas del perfil de calidad.</div></li>
+          <li><div class="step-n">🐍</div><div><strong>Python (opcional):</strong> notebook .ipynb ejecutado con ydata-profiling + celdas de análisis comentadas.</div></li>
+          <li><div class="step-n">📋</div><div><strong>Diccionario:</strong> Google Sheets o Excel con más de 10 campos + licencia + uso responsable declarado.</div></li>
+        </ul>
+      </div>
+    </div>
 
   <!-- Dataset -->
   <div class="dataset-card">
-    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Ventas Minoristas Perú</h4><p>Datos de transacciones de comercios peruanos. Variables: fecha, categoria, monto, region, canal_venta. Problemas reales de calidad incluidos.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
-    <div><div class="card-label">Alternativa</div><h4>Superstore Sales Dataset</h4><p>Dataset de ventas de una cadena retail con regiones, categorías, descuentos y ganancias. Más de 9,000 registros con inconsistencias de formato reales.</p><a href="https://www.kaggle.com/datasets/vivek468/superstore-dataset-final" target="_blank">↗ Kaggle: Superstore Dataset</a></div>
-    <div><div class="card-label">Problemas de calidad presentes</div><p>→ Fechas en formatos mixtos (DD/MM vs MM/DD)</p><p>→ Descuentos mayores a 1.0 (error de captura)</p><p>→ Profit negativo sin explicación contextual</p><p>→ Categorías con variaciones de texto ("Tech" vs "Technology")</p></div>
-  </div>
-
-  <!-- Resources -->
-  <div class="sec-label">Recursos</div>
-  <div class="res-grid">
-    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>Data Futurology — "Calidad de datos en producción"</h5><a href="https://www.datafuturology.com" target="_blank">datafuturology.com</a><div class="res-use">Inicio de clase: reproducir 10 min. Los estudiantes identifican qué dimensión de calidad se discute en cada problema mencionado.</div></div>
-    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Rafa Gonzalez — "Limpieza de datos con pandas" (español)</h5><a href="https://www.youtube.com/@rafa_python" target="_blank">youtube.com/@rafa_python</a><div class="res-use">Antes del lab: ver como preparación técnica. Identificar qué decisiones de limpieza toma el autor y si aplicarían al caso Wong.</div></div>
-    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>PacktPublishing / Data-Quality-Fundamentals</h5><a href="https://github.com/PacktPublishing/Data-Quality-Fundamentals" target="_blank">github.com/PacktPublishing/Data-Quality-Fundamentals</a><div class="res-use">Tarea: revisar capítulo 2 (Missing Data) y replicar el análisis de nulos con el dataset del lab.</div></div>
-  </div>
-
-  <!-- Quiz -->
-  <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
-  <div class="quiz-block">
-    <div class="quiz-hdr">Tema 01 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
-    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>Nulos:</strong> Al importar el CSV de ventas, el 28% de la columna precio_unitario es nulo. Al cruzar con la columna tipo_transaccion descubres que el 91% de esos nulos son devoluciones. ¿Qué mecanismo de ausencia es este (MCAR, MAR, MNAR)? ¿Qué estrategia de tratamiento aplicarías y cómo afecta al cálculo de revenue neto si eliminas esas filas?</div></div>
-    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>Decisión de negocio:</strong> Encuentras 847 registros con precio_unitario = 0 (3.2% del total). Algunos corresponden a productos de cortesía del supermercado, otros parecen errores de captura. ¿Cómo distingues ambos casos? ¿Qué harías con cada grupo? Argumenta con criterio de negocio, no solo técnico.</div></div>
-    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Caso ético:</strong> Wong quiere usar los patrones de compra de sus clientes con tarjeta de fidelización para inferir si están embarazadas y enviarles ofertas de pañales antes de que lo anuncien. Desde tu rol como analista, ¿qué consideraciones éticas incluirías en el diccionario de datos? ¿Qué restricciones de uso declararías?</div></div>
-  </div>
-</div>
+      <div>
+        <div class="card-label">Dataset Principal</div>
+        <h4>Atenciones Oncológicas — IREN Centro</h4>
+        <p>Datos oficiales del IREN Centro - MINSA. Incluye registros de atenciones, especialidades (UPSS) y demografía del paciente.</p>
+        <a href="https://www.datosabiertos.gob.pe/dataset/atenciones-oncol%C3%B3gicas-realizadas-en-iren-centro-instituto-regional-de-enfermedades" target="_blank">↗ Plataforma Nacional de Datos Abiertos</a>
+      </div>
+  
+      <div>
+        <div class="card-label">Alternativa</div>
+        <h4>Superstore Sales Dataset</h4>
+        <p>Dataset de ventas retail con regiones, categorías y descuentos. Más de 9,000 registros con inconsistencias reales.</p>
+        <a href="https://www.kaggle.com/datasets/vivek468/superstore-dataset-final" target="_blank">↗ Kaggle: Superstore Dataset</a>
+      </div>
+  
+      <div>
+        <div class="card-label">Hallazgos de calidad en este dataset</div>
+        <p>→ Inconsistencias en EDAD vs Año de Nacimiento.</p>
+        <p>→ Registros duplicados por ID_CITA y paciente.</p>
+        <p>→ Nulos en montos dependientes del tipo de seguro.</p>
+        <p>→ Errores de codificación en servicios (tildes).</p>
+      </div>
+    </div>
+  
+    <div class="sec-label">Recursos</div>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-type rt-yt">● YouTube</div>
+        <h5>Corey Schafer — "Cleaning Data in Pandas"</h5>
+        <a href="https://www.youtube.com/watch?v=KdmPHEnPJPs" target="_blank">youtube.com/watch?v=KdmPHEnPJPs</a>
+        <div class="res-use">Manejo de missing values y preparación de DataFrames.</div>
+      </div>
+      
+      <div class="res-card">
+        <div class="res-type rt-gh">● Documentación</div>
+        <h5>Pandas Official — "Missing data"</h5>
+        <a href="https://pandas.pydata.org/docs/user_guide/missing_data.html" target="_blank">pandas.pydata.org/docs/missing_data</a>
+        <div class="res-use">Revisar fillna(), dropna() e interpolación para tratar vacíos.</div>
+      </div>
+      
+      <div class="res-card">
+        <div class="res-type rt-article">● Artículo</div>
+        <h5>IBM — "What is data quality?"</h5>
+        <a href="https://www.ibm.com/topics/data-quality" target="_blank">ibm.com/topics/data-quality</a>
+        <div class="res-use">Lectura sobre exactitud, completitud y consistencia.</div>
+      </div>
+    </div>
+  
+    <div class="sec-label">Evaluación EP — Cuestionario Tema 1 (3 intentos)</div>
+    <div class="quiz-block">
+      <div class="quiz-hdr">Tema 01 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
+      
+      <div class="quiz-q">
+        <div class="qn">Q1</div>
+        <div class="qt">
+          <strong>Tratamiento de Nulos:</strong> En el notebook, la columna <code>monto_prestacion</code> presenta nulos para pacientes con "SIS". ¿Qué estrategia aplicarías para no distorsionar el costo promedio?
+        </div>
+      </div>
+  
+      <div class="quiz-q">
+        <div class="qn">Q2</div>
+        <div class="qt">
+          <strong>Perfilado de Consistencia:</strong> El histograma muestra edades de -5 y 125 años. ¿Cómo impacta esto en la media y por qué filtrarlos antes de entregar al MINSA?
+        </div>
+      </div>
+  
+      <div class="quiz-q">
+        <div class="qn">Q3</div>
+        <div class="qt">
+          <strong>Unicidad:</strong> El dataset tiene registros duplicados exactos. ¿Cuál es el riesgo ético y financiero si el IREN Centro usa esto para solicitar presupuesto?
+        </div>
+      </div>
+    </div>
 
 <!-- ═══════════════════ TEMA 2 ═══════════════════ -->
 <div class="week-panel" id="panel-2">
