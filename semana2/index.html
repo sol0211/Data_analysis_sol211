@@ -664,14 +664,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   <div class="wk-header">
     <div class="wk-num-badge" style="background:rgba(77,166,255,.12);color:var(--info)">02</div>
     <div class="wk-info">
-      <div class="wk-eyebrow">Tema 02 · Limpieza y transformación</div>
+      <div class="wk-eyebrow">Tema 02 · Limpieza y transformación (Wrangling)</div>
       <div class="wk-title">Wrangling con Python/R y SQL</div>
-      <div class="wk-desc">El wrangling no es limpiar datos — es construir la tabla analítica que habilita decisiones. Un JOIN incorrecto contamina todo lo que viene después.</div>
+      <div class="wk-desc">Limpiar datos no es opcional — es el 70% del trabajo real. Un JOIN mal hecho o una categoría con tres nombres distintos destruye cualquier análisis posterior, sin importar cuán sofisticado sea el modelo.</div>
       <div class="tag-row">
         <span class="tag">Normalización · Fechas · Cast de tipos</span>
         <span class="tag">SQL: SELECT · JOIN · GROUP BY · HAVING</span>
-        <span class="tag">KPIs base</span>
-        <span class="tag">Esquema estrella</span>
+        <span class="tag">Columnas calculadas · KPIs base</span>
+        <span class="tag">Esquema estrella · Hechos y dimensiones</span>
         <span class="tag" style="color:var(--info);border-color:rgba(77,166,255,.3)">EP · Cuestionario</span>
       </div>
     </div>
@@ -680,141 +680,433 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;lin
   <div class="two-col">
     <div class="card" style="border-left:3px solid var(--info)">
       <div class="card-label">Logro del tema</div>
-      <h4>Aplica técnicas de limpieza y transformación con Python, R y SQL para preparar datos estructurados que faciliten el análisis</h4>
+      <h4>Aplica técnicas de limpieza y transformación con Python/R y SQL para preparar conjuntos de datos estructurados que faciliten el análisis posterior</h4>
       <ul>
-        <li>Estandarizar formatos, parsear fechas y castear tipos en al menos 3 columnas</li>
-        <li>Crear base local en SQL Server Express, ejecutar 2 JOINs y 1 resumen GROUP BY</li>
-        <li>Calcular 3 KPIs base: total, promedio, porcentaje con verificación</li>
-        <li>Diseñar modelo estrella básico con tabla de hechos y dimensiones</li>
+        <li>Normalizar textos, parsear fechas en 3 formatos distintos y castear tipos en al menos 3 columnas</li>
+        <li>Detectar y resolver duplicados, registros sin FK y monedas mixtas</li>
+        <li>Ejecutar 2 JOINs justificados (INNER vs LEFT) y 1 resumen GROUP BY + HAVING en SQL</li>
+        <li>Calcular 3 KPIs base: revenue total, ticket promedio y % de órdenes canceladas</li>
+        <li>Diseñar el esquema estrella de Novomart con tabla de hechos y 3 dimensiones</li>
       </ul>
     </div>
     <div class="card" style="border-left:3px solid var(--accent2)">
-      <div class="card-label">Caso de negocio — E-commerce</div>
-      <h4>Falabella.com: integrar pedidos, clientes y logística en una sola tabla analítica</h4>
-      <p>Falabella opera con 3 sistemas distintos: SAP (pedidos), Salesforce (clientes) y un TMS propio (envíos). Cada sistema exporta en diferente formato y con IDs incompatibles. El equipo de operaciones necesita calcular el tiempo promedio de entrega por región para decidir dónde abrir un nuevo centro de distribución.</p>
-      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> construir la tabla analítica maestra que una los 3 sistemas.</p>
+      <div class="card-label">Caso de negocio — Retail Tecnología · Perú</div>
+      <h4>Novomart: los tres sistemas que nunca hablan entre sí</h4>
+      <p>Novomart es una cadena de retail tecnológico con tiendas en Lima, Arequipa, Cusco y Trujillo. Operan con tres sistemas distintos exportados en CSV: <strong>ventas_raw</strong> (POS), <strong>clientes_raw</strong> (CRM) y <strong>productos_raw</strong> (ERP).</p>
+      <p style="margin-top:8px">El gerente comercial quiere saber el <strong>revenue real del Q1 2024 por segmento de cliente</strong>, pero cada archivo tiene su propio desorden: fechas en tres formatos, ciudades escritas de ocho maneras, montos en PEN y USD mezclados, y duplicados que inflan los totales.</p>
+      <p style="margin-top:8px"><strong style="color:var(--accent2)">Tu misión:</strong> construir la tabla analítica maestra que una los tres sistemas y permita calcular KPIs confiables.</p>
+    </div>
+  </div>
+
+  <div class="sec-label">Diagnóstico del dataset Novomart — problemas reales a resolver</div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-label" style="color:var(--accent)">ventas_raw.csv · 20 registros</div>
+      <h4>Problemas detectados</h4>
+      <ul>
+        <li><strong>3 formatos de fecha:</strong> <code>2024-02-05</code>, <code>28/02/2024</code>, <code>Mar 05 24</code> — GROUP BY por mes imposible sin parsear</li>
+        <li><strong>2 duplicados exactos:</strong> ORD-4528 y ORD-4533 aparecen dos veces — inflarían el revenue en S/ 880</li>
+        <li><strong>2 montos nulos:</strong> ORD-4529 y ORD-4536 sin monto — ¿excluir o imputar?</li>
+        <li><strong>1 orden sin cliente:</strong> ORD-4530 con cliente_id = NaN — imposible calcular KPI por segmento</li>
+        <li><strong>5 órdenes en USD:</strong> monedas mixtas distorsionan cualquier suma en PEN</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--accent2)">clientes_raw.csv · 10 registros</div>
+      <h4>Problemas detectados</h4>
+      <ul>
+        <li><strong>4 variantes de "Lima":</strong> Lima, LIMA, LIM, lima — GROUP BY por ciudad falla completamente</li>
+        <li><strong>3 variantes de "segmento":</strong> Premium, premium, PREMIUM — los KPIs por segmento no coincidirían</li>
+        <li><strong>2 ciudades nulas:</strong> CLI-008 y CLI-010 sin ciudad declarada</li>
+        <li><strong>1 segmento nulo:</strong> CLI-010 sin segmento — ¿cliente nuevo o error de registro?</li>
+        <li><strong>1 cliente inactivo:</strong> CLI-004 con activo = 0 — ¿se incluye en el análisis?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--accent3)">productos_raw.csv · 8 registros</div>
+      <h4>Problemas detectados</h4>
+      <ul>
+        <li><strong>3 variantes de "Accesorios":</strong> Accesorios, ACCESORIOS, accesorios — análisis por categoría sería incorrecto</li>
+        <li><strong>1 variante sin normalizar:</strong> "Periferico" sin tilde ni formato estándar</li>
+        <li><strong>1 precio nulo:</strong> PROD-008 (Hub USB-C) sin precio_base — no puede entrar en cálculo de margen</li>
+        <li><strong>1 stock nulo:</strong> PROD-008 también sin stock — ¿producto descontinuado?</li>
+        <li><strong>Monedas mixtas:</strong> PEN y USD en precio_base — sin conversión los promedios son basura</li>
+      </ul>
     </div>
   </div>
 
   <div class="sec-label">Casos reales de negocio</div>
+
   <div class="case-card">
     <div class="case-top">
       <div class="case-icon ci-blue">🚢</div>
-      <div><div class="case-co">Logística · Global · 2021</div>
-      <div class="case-ti">El error de JOIN que hizo que Maersk perdiera la trazabilidad de 60,000 contenedores</div></div>
+      <div>
+        <div class="case-co">Logística global · A.P. Møller-Maersk · 2021</div>
+        <div class="case-ti">El INNER JOIN que hizo desaparecer 60,000 contenedores del sistema de trazabilidad</div>
+      </div>
     </div>
     <div class="case-body">
-      <p>Durante la migración de sus sistemas de seguimiento de contenedores, Maersk realizó un INNER JOIN entre la tabla de manifiestos y la tabla de ubicaciones usando un campo de ID que tenía variaciones de formato (con y sin prefijo de país). El resultado: 60,000 contenedores quedaron sin ubicación en el sistema durante horas porque sus registros no hicieron match.</p>
-      <p>El costo: retrasos operacionales en 120 puertos y clientes que no podían rastrear mercancías valoradas en millones de dólares.</p>
-      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Antes de cualquier JOIN, verificar integridad referencial. ¿Cuántos registros de la tabla izquierda no tienen match en la derecha? Un INNER JOIN silencioso puede eliminar datos críticos sin advertir. Siempre comparar conteo antes y después del JOIN.</div></div>
+      <p>Durante la migración de sus sistemas de tracking, Maersk realizó un INNER JOIN entre manifiestos y ubicaciones usando un campo ID con variaciones de formato: algunos registros usaban prefijo de país (<code>DK-CONT-4821</code>) y otros no (<code>CONT-4821</code>). Resultado: 60,000 contenedores sin ubicación en el sistema durante horas, afectando más de 120 puertos. La mercancía seguía físicamente en los barcos — el problema era solo de datos.</p>
+      <p>Un LEFT JOIN con auditoría previa del conteo de filas habría detectado el desbalance antes del desastre.</p>
+      <div class="case-lesson">
+        <div class="lesson-icon">→</div>
+        <div class="lesson-text"><strong>Lección para Novomart:</strong> Antes de cualquier JOIN, verificar: ¿cuántas órdenes de ventas_raw no encuentran match en clientes_raw? En nuestro dataset, ORD-4530 tiene cliente_id nulo. Un INNER JOIN la eliminaría silenciosamente — un LEFT JOIN la deja visible para auditar. Siempre comparar conteo antes y después del JOIN.</div>
+      </div>
     </div>
   </div>
 
   <div class="case-card">
     <div class="case-top">
       <div class="case-icon ci-amber">🏦</div>
-      <div><div class="case-co">Banca · Perú · 2019</div>
-      <div class="case-ti">BCP: el KPI de morosidad estaba mal calculado durante 6 meses por un error de desnormalización</div></div>
+      <div>
+        <div class="case-co">Banca · BCP · Perú · 2019</div>
+        <div class="case-ti">El KPI de morosidad que estuvo equivocado 6 meses por desnormalización en el esquema estrella</div>
+      </div>
     </div>
     <div class="case-body">
-      <p>El equipo de riesgo del BCP calculaba la tasa de morosidad dividiendo "créditos vencidos" entre "cartera total". Después de una migración de esquemas, la tabla de cartera total incluyó dos veces los créditos refinanciados (estaban en dos dimensiones distintas que se unieron con FULL JOIN). El KPI reportaba una morosidad 3 puntos porcentuales menor a la real durante 6 meses antes de que auditoría lo detectara.</p>
-      <div class="case-lesson"><div class="lesson-icon">→</div><div class="lesson-text"><strong>Lección:</strong> Los KPIs tienen denominadores que nadie audita. <strong>Verificar el KPI contra una fuente alternativa</strong> antes de reportarlo. Un error de modelado en el esquema estrella puede sesgar todos los indicadores derivados.</div></div>
+      <p>El equipo de riesgo del BCP calculaba la tasa de morosidad dividiendo "créditos vencidos" entre "cartera total". Después de una migración, la tabla de cartera total incluyó dos veces los créditos refinanciados porque aparecían en dos dimensiones distintas unidas con FULL JOIN sin verificación. El KPI reportaba morosidad 3 puntos porcentuales menor a la real durante 6 meses — hasta que auditoría interna lo detectó al comparar contra el reporte de la SBS.</p>
+      <div class="case-lesson">
+        <div class="lesson-icon">→</div>
+        <div class="lesson-text"><strong>Lección:</strong> Los KPIs tienen denominadores que nadie audita hasta que algo falla. En Novomart: si calculamos revenue con los 2 duplicados (ORD-4528 y ORD-4533), el total sube S/ 880 artificialmente. <strong>Siempre verificar el KPI calculado contra una fuente alternativa</strong> antes de reportar al gerente comercial.</div>
+      </div>
     </div>
   </div>
 
-  <div class="flow-row">
-    <div class="flow-step"><div class="flow-tag ft-hook">Inicio · 15 min</div><div class="flow-step-num">01</div><h5>"Los datos que nunca hablan entre sí"</h5><p>Mostrar en pantalla 3 archivos del mismo negocio con IDs incompatibles, fechas en formatos distintos y nombres de clientes con variaciones. ¿Cuánto tiempo pierde un analista sin saber wrangling?</p></div>
-    <div class="flow-step"><div class="flow-tag ft-dev">Desarrollo · 60 min</div><div class="flow-step-num">02</div><h5>Lab: tabla analítica maestra Falabella</h5><p>SQL: crear BD local, unir pedidos + clientes + envíos con 2 JOINs. Python: normalizar IDs y fechas. Diseñar modelo estrella en diagrams.net. Calcular 3 KPIs y verificarlos.</p></div>
-    <div class="flow-step"><div class="flow-tag ft-close">Cierre · 15 min</div><div class="flow-step-num">03</div><h5>¿Dónde abrimos el nuevo CD?</h5><p>Con la tabla unificada: ¿qué región tiene el peor tiempo de entrega? ¿Qué volumen justifica un centro de distribución? Cada equipo presenta su recomendación en 2 minutos.</p></div>
+  <div class="case-card">
+    <div class="case-top">
+      <div class="case-icon ci-green">🛒</div>
+      <div>
+        <div class="case-co">E-commerce · UCI Machine Learning Repository · UK · 2010-2011</div>
+        <div class="case-ti">Online Retail: 541K transacciones donde las devoluciones sumadas como ventas inflaron el LTV un 34%</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <p>El Online Retail Dataset del UCI ML Repository contiene 541,909 transacciones reales. El dataset mezcla ventas y devoluciones en la misma tabla: las devoluciones usan InvoiceNo con prefijo "C" (de Credit). Quien no conocía esta convención las sumaba como ventas positivas. Sin wrangling previo, el LTV calculado era 34% mayor al real. Adicionalmente: cantidades negativas, precios en cero y CustomerIDs nulos para órdenes de "invitados" — exactamente los mismos problemas de Novomart a escala de 500K filas.</p>
+      <div class="case-lesson">
+        <div class="lesson-icon">→</div>
+        <div class="lesson-text"><strong>Fuente abierta para práctica avanzada:</strong> <a href="https://archive.ics.uci.edu/dataset/502/online+retail+ii" target="_blank" style="color:var(--info)">UCI ML Repository — Online Retail II (2009-2011)</a>. Mismo pipeline de wrangling de Novomart pero a escala de 1 millón de filas. Los problemas de categorías inconsistentes, duplicados y montos nulos están presentes con convenciones no documentadas.</div>
+      </div>
+    </div>
   </div>
 
-  <div class="err-banner"><div class="err-icon">⚠</div><div class="err-text"><strong>Error real:</strong> Hacer INNER JOIN entre pedidos y clientes perdiendo todos los pedidos de compradores "invitados" (sin cuenta registrada). En e-commerce, esto puede representar el 25-35% del volumen total de ventas — eliminarlo sesga cualquier análisis de revenue.</div></div>
+  <div class="sec-label">Flujo de clase</div>
+  <div class="flow-row">
+    <div class="flow-step">
+      <div class="flow-tag ft-hook">Inicio · 15 min</div>
+      <div class="flow-step-num">01</div>
+      <h5>"Los datos que nunca hablan entre sí"</h5>
+      <p>Abrir los tres CSV de Novomart en pantalla. Pedir a la clase que calcule el revenue total del Q1 manualmente. Revelar duplicados, nulos y monedas mixtas. ¿Cuánto se equivocaron? ¿Quién sumó los USD directamente con PEN?</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-tag ft-dev">Desarrollo · 65 min</div>
+      <div class="flow-step-num">02</div>
+      <h5>Pipeline de wrangling: de 3 CSV a 1 tabla analítica</h5>
+      <p>Paso 1: normalizar textos (str.title). Paso 2: parsear las 3 variantes de fecha. Paso 3: eliminar duplicados y decidir nulos. Paso 4: convertir USD→PEN. Paso 5: LEFT JOIN en Python y SQL. Paso 6: calcular los 3 KPIs y diseñar el esquema estrella.</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-tag ft-close">Cierre · 10 min</div>
+      <div class="flow-step-num">03</div>
+      <h5>¿Cuál es el revenue real de Novomart en Q1?</h5>
+      <p>Cada equipo presenta su revenue final calculado. ¿Todos llegaron al mismo número? Si no — ¿qué decisión de limpieza fue diferente? No hay una sola respuesta correcta: hay decisiones documentadas y justificadas.</p>
+    </div>
+  </div>
+
+  <div class="err-banner">
+    <div class="err-icon">⚠</div>
+    <div class="err-text"><strong>Error real en producción:</strong> Hacer INNER JOIN entre ventas y clientes perdiendo todas las órdenes sin cliente registrado (ORD-4530 en Novomart). En e-commerce, los pedidos de "invitados" representan el 25-35% del volumen total. Eliminarlos con INNER JOIN sesga el revenue hacia abajo y hace invisible un segmento completo de compradores para el gerente comercial.</div>
+  </div>
 
   <div class="sec-label">Laboratorio — UAIN1008V_Tema2</div>
   <div class="lab-wrap">
     <div class="lab-hdr">
-      <div style="display:flex;align-items:center"><div class="lab-badge">● Lab T2</div><div class="lab-title">Wrangling: ETL, JOINs y KPIs base</div></div>
-      <div class="lab-tool">Power BI · SQL Server Express · SSMS · diagrams.net</div>
+      <div style="display:flex;align-items:center">
+        <div class="lab-badge">● Lab T2</div>
+        <div class="lab-title">Wrangling Novomart: de tres CSV a una tabla analítica</div>
+      </div>
+      <div class="lab-tool">Python · pandas · SQL Server Express / SQLite</div>
     </div>
     <div class="lab-tabs">
       <div class="lab-tab active" onclick="switchTab(this,'l2','steps')">Procedimiento</div>
+      <div class="lab-tab" onclick="switchTab(this,'l2','python')">Python</div>
       <div class="lab-tab" onclick="switchTab(this,'l2','sql')">SQL</div>
       <div class="lab-tab" onclick="switchTab(this,'l2','entregables')">Entregables</div>
     </div>
+
     <div id="l2-steps" class="lab-content active">
       <ul class="step-list">
-        <li><div class="step-n">1</div><div>Descargar dataset, registrar fuente y licencia. Crear carpeta: <strong>UAIN1008V_Tema2_ApellidoNombre</strong></div></li>
-        <li><div class="step-n">2</div><div><strong>Estandarización:</strong> corregir fechas, textos y tipos numéricos en al menos 3 columnas. Documentar cada corrección.</div></li>
-        <li><div class="step-n">3</div><div><strong>SQL — Integración:</strong> crear BD local en SQL Server Express, realizar 2 JOINs justificados (comparar INNER vs LEFT) y 1 resumen GROUP BY con HAVING.</div></li>
-        <li><div class="step-n">4</div><div><strong>KPIs base:</strong> calcular 3 KPIs (total ventas, ticket promedio, % devoluciones). Verificar cada uno contra una fuente alternativa.</div></li>
-        <li><div class="step-n">5</div><div><strong>Modelo estrella:</strong> diseñar esquema en diagrams.net con tabla de hechos y mínimo 2 dimensiones (tiempo, producto o cliente).</div></li>
-        <li><div class="step-n">6</div><div><strong>Validación y exportación:</strong> coherencia de totales, documentar supuestos. Exportar evidencias en PDF.</div></li>
+        <li><div class="step-n">1</div><div>Descargar los tres CSV de Novomart. Crear carpeta: <strong>UAIN1008V_Tema2_ApellidoNombre/</strong>. Registrar fuente, fecha y licencia de cada dataset en <code>fuentes.txt</code>.</div></li>
+        <li><div class="step-n">2</div><div><strong>Auditoría inicial:</strong> documentar cuántos problemas tiene cada archivo con <code>df.info()</code>, <code>df.duplicated().sum()</code> y <code>df.isnull().sum()</code>. Este es el punto de partida que se entrega en el PDF.</div></li>
+        <li><div class="step-n">3</div><div><strong>Normalización de textos:</strong> estandarizar <code>ciudad</code> (4 variantes de "Lima") y <code>segmento</code> (3 variantes de "Premium") en clientes_raw. Estandarizar <code>categoria</code> (3 variantes de "Accesorios") en productos_raw usando <code>str.title()</code> y mapas de reemplazo.</div></li>
+        <li><div class="step-n">4</div><div><strong>Parseo de fechas:</strong> convertir las 3 variantes de fecha en ventas_raw (<code>2024-02-05</code>, <code>28/02/2024</code>, <code>Mar 05 24</code>) a un único formato datetime. Usar <code>pd.to_datetime(format='mixed')</code> y documentar el método elegido.</div></li>
+        <li><div class="step-n">5</div><div><strong>Duplicados y nulos:</strong> eliminar los 2 duplicados de ventas_raw. Decidir qué hacer con los 2 montos nulos: excluir o imputar con precio_base del producto. Documentar el razonamiento y el impacto numérico en el KPI de revenue.</div></li>
+        <li><div class="step-n">6</div><div><strong>Conversión de moneda:</strong> convertir los 5 registros en USD a PEN usando tipo de cambio S/ 3.72. Crear columna <code>monto_pen</code> unificada. Documentar el supuesto de tipo de cambio fijo.</div></li>
+        <li><div class="step-n">7</div><div><strong>JOIN y tabla analítica:</strong> unir los tres datasets usando LEFT JOIN para ventas → clientes y ventas → productos. Verificar conteo de filas antes y después del JOIN.</div></li>
+        <li><div class="step-n">8</div><div><strong>KPIs base:</strong> calcular revenue total Q1 en PEN, ticket promedio y % de órdenes canceladas. Calcular revenue por segmento de cliente. Verificar cada KPI contra el CSV original de forma alternativa.</div></li>
+        <li><div class="step-n">9</div><div><strong>Esquema estrella:</strong> diseñar el modelo con <code>fact_ventas</code> y las dimensiones <code>dim_clientes</code>, <code>dim_productos</code> y <code>dim_tiempo</code>. Diagramar en diagrams.net o dibujo fotografiado.</div></li>
+        <li><div class="step-n">10</div><div><strong>Exportar:</strong> guardar <code>novomart_analitica.csv</code> limpio. Exportar PDF con capturas de cada paso, los 3 KPIs calculados y reflexión de 1 página sobre las decisiones tomadas.</div></li>
       </ul>
     </div>
-    <div id="l2-sql" class="lab-content">
-<div class="code-block"><span class="cm">-- Verificar integridad antes del JOIN</span>
-<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">AS</span> pedidos_sin_cliente
-<span class="kw">FROM</span> pedidos p
-<span class="kw">LEFT JOIN</span> clientes c <span class="kw">ON</span> p.id_cliente = c.id_cliente
-<span class="kw">WHERE</span> c.id_cliente <span class="kw">IS NULL</span>;
 
-<span class="cm">-- Tabla analítica con CTE</span>
-<span class="kw">WITH</span> pedidos_enriquecidos <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        p.id_pedido,
-        p.fecha_pedido,
-        p.monto_total,
-        c.region,
-        c.segmento,
-        <span class="fn">DATEDIFF</span>(e.fecha_entrega, p.fecha_pedido) <span class="kw">AS</span> dias_entrega,
-        <span class="kw">CASE</span>
-            <span class="kw">WHEN</span> c.compras_historicas &gt; 5000 <span class="kw">THEN</span> <span class="str">'Premium'</span>
-            <span class="kw">WHEN</span> c.compras_historicas &gt; 1000 <span class="kw">THEN</span> <span class="str">'Regular'</span>
-            <span class="kw">ELSE</span> <span class="str">'Nuevo'</span>
-        <span class="kw">END</span> <span class="kw">AS</span> tier_cliente
-    <span class="kw">FROM</span> pedidos p
-    <span class="kw">LEFT JOIN</span> clientes c <span class="kw">ON</span> p.id_cliente = c.id_cliente
-    <span class="kw">LEFT JOIN</span> envios e <span class="kw">ON</span> p.id_pedido = e.id_pedido
+    <div id="l2-python" class="lab-content">
+<div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># ── 1. CARGA ──────────────────────────────────────────────────</span>
+ventas    = pd.<span class="fn">read_csv</span>(<span class="str">'ventas_raw.csv'</span>)
+clientes  = pd.<span class="fn">read_csv</span>(<span class="str">'clientes_raw.csv'</span>)
+productos = pd.<span class="fn">read_csv</span>(<span class="str">'productos_raw.csv'</span>)
+
+<span class="cm"># ── 2. AUDITORÍA INICIAL ──────────────────────────────────────</span>
+<span class="kw">for</span> nombre, df <span class="kw">in</span> {<span class="str">'ventas'</span>: ventas, <span class="str">'clientes'</span>: clientes, <span class="str">'productos'</span>: productos}.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="str">f"
+=== {nombre} === nulos: {df.isnull().sum().sum()} | dupes: {df.duplicated().sum()}"</span>)
+
+<span class="cm"># ── 3. NORMALIZAR TEXTOS ──────────────────────────────────────</span>
+clientes[<span class="str">'ciudad'</span>]    = clientes[<span class="str">'ciudad'</span>].<span class="fn">str</span>.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">title</span>()
+clientes[<span class="str">'segmento'</span>]  = clientes[<span class="str">'segmento'</span>].<span class="fn">str</span>.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">title</span>()
+productos[<span class="str">'categoria'</span>] = productos[<span class="str">'categoria'</span>].<span class="fn">str</span>.<span class="fn">strip</span>().<span class="fn">str</span>.<span class="fn">title</span>()
+
+<span class="cm"># Mapas de corrección para abreviaturas</span>
+mapa_ciudad = {<span class="str">'Lim'</span>: <span class="str">'Lima'</span>, <span class="str">'Arq'</span>: <span class="str">'Arequipa'</span>}
+clientes[<span class="str">'ciudad'</span>] = clientes[<span class="str">'ciudad'</span>].<span class="fn">replace</span>(mapa_ciudad)
+mapa_cat = {<span class="str">'Periferico'</span>: <span class="str">'Periférico'</span>}
+productos[<span class="str">'categoria'</span>] = productos[<span class="str">'categoria'</span>].<span class="fn">replace</span>(mapa_cat)
+
+<span class="cm"># ── 4. PARSEO DE FECHAS (3 FORMATOS) ─────────────────────────</span>
+ventas[<span class="str">'fecha'</span>] = pd.<span class="fn">to_datetime</span>(
+    ventas[<span class="str">'fecha'</span>], format=<span class="str">'mixed'</span>, dayfirst=<span class="kw">True</span>
 )
-<span class="kw">SELECT</span> region,
-    <span class="fn">AVG</span>(dias_entrega) <span class="kw">AS</span> promedio_entrega,
-    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_pedidos,
-    <span class="fn">SUM</span>(monto_total) <span class="kw">AS</span> revenue_region
-<span class="kw">FROM</span> pedidos_enriquecidos
-<span class="kw">GROUP BY</span> region
-<span class="kw">HAVING COUNT</span>(*) &gt; 100
-<span class="kw">ORDER BY</span> promedio_entrega <span class="kw">DESC</span>;</div>
+ventas[<span class="str">'mes'</span>]  = ventas[<span class="str">'fecha'</span>].<span class="fn">dt</span>.month
+ventas[<span class="str">'anio'</span>] = ventas[<span class="str">'fecha'</span>].<span class="fn">dt</span>.year
+
+<span class="cm"># ── 5. DUPLICADOS Y NULOS ─────────────────────────────────────</span>
+n0 = <span class="fn">len</span>(ventas)
+ventas = ventas.<span class="fn">drop_duplicates</span>(keep=<span class="str">'first'</span>)
+<span class="fn">print</span>(<span class="str">f"Duplicados eliminados: {n0 - len(ventas)}"</span>)
+
+<span class="cm"># Decisión documentada: excluir montos nulos</span>
+<span class="cm"># (no se puede imputar sin precio acordado con el cliente)</span>
+ventas_clean = ventas.<span class="fn">dropna</span>(subset=[<span class="str">'monto'</span>])
+<span class="fn">print</span>(<span class="str">f"Filas tras excluir montos nulos: {len(ventas_clean)}"</span>)
+
+<span class="cm"># ── 6. CONVERSIÓN DE MONEDA ───────────────────────────────────</span>
+TC = <span class="str">3.72</span>  <span class="cm"># Supuesto: tipo de cambio fijo SBS referencia Q1 2024</span>
+ventas_clean = ventas_clean.<span class="fn">copy</span>()
+ventas_clean[<span class="str">'monto_pen'</span>] = <span class="fn">np.where</span>(
+    ventas_clean[<span class="str">'moneda'</span>] == <span class="str">'USD'</span>,
+    ventas_clean[<span class="str">'monto'</span>] * TC,
+    ventas_clean[<span class="str">'monto'</span>]
+)
+
+<span class="cm"># ── 7. JOIN: LEFT para no perder órdenes sin cliente ─────────</span>
+n_pre = <span class="fn">len</span>(ventas_clean)
+df = ventas_clean.<span class="fn">merge</span>(clientes,  on=<span class="str">'cliente_id'</span>,  how=<span class="str">'left'</span>)
+df = df.<span class="fn">merge</span>(productos, on=<span class="str">'producto_id'</span>, how=<span class="str">'left'</span>)
+<span class="fn">print</span>(<span class="str">f"Filas pre-JOIN: {n_pre} | post-JOIN: {len(df)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Órdenes sin cliente match: {df['nombre'].isnull().sum()}"</span>)
+
+<span class="cm"># ── 8. KPIs BASE ──────────────────────────────────────────────</span>
+df_ok = df[df[<span class="str">'estado'</span>] != <span class="str">'cancelado'</span>]
+revenue  = df_ok[<span class="str">'monto_pen'</span>].<span class="fn">sum</span>()
+ticket   = df_ok[<span class="str">'monto_pen'</span>].<span class="fn">mean</span>()
+pct_canc = (df[<span class="str">'estado'</span>]==<span class="str">'cancelado'</span>).<span class="fn">mean</span>() * 100
+
+<span class="fn">print</span>(<span class="str">f"
+Revenue Q1 (PEN): S/ {revenue:,.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Ticket promedio:  S/ {ticket:,.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"% Canceladas:     {pct_canc:.1f}%"</span>)
+
+<span class="cm"># KPI por segmento (tabla analítica clave)</span>
+kpi_seg = df_ok.<span class="fn">groupby</span>(<span class="str">'segmento'</span>)[<span class="str">'monto_pen'</span>].<span class="fn">agg</span>(
+    total=<span class="str">'sum'</span>, promedio=<span class="str">'mean'</span>, ordenes=<span class="str">'count'</span>
+).<span class="fn">reset_index</span>()
+<span class="fn">print</span>(kpi_seg)
+
+<span class="cm"># ── 9. EXPORTAR TABLA ANALÍTICA ───────────────────────────────</span>
+df.<span class="fn">to_csv</span>(<span class="str">'novomart_analitica.csv'</span>, index=<span class="kw">False</span>)
+<span class="fn">print</span>(<span class="str">"✓ Exportado: novomart_analitica.csv"</span>)</div>
     </div>
+
+    <div id="l2-sql" class="lab-content">
+<div class="code-block"><span class="cm">-- PASO 1: Verificar integridad referencial ANTES del JOIN</span>
+<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">AS</span> ordenes_sin_cliente
+<span class="kw">FROM</span> ventas v
+<span class="kw">LEFT JOIN</span> clientes c <span class="kw">ON</span> v.cliente_id = c.cliente_id
+<span class="kw">WHERE</span> c.cliente_id <span class="kw">IS NULL</span>;
+
+<span class="cm">-- PASO 2: Tabla analítica limpia con CTEs</span>
+<span class="kw">WITH</span> ventas_sin_dupes <span class="kw">AS</span> (
+    <span class="cm">-- Eliminar duplicados conservando el primer registro</span>
+    <span class="kw">SELECT</span> *,
+        <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> order_id <span class="kw">ORDER BY</span> order_id) <span class="kw">AS</span> rn
+    <span class="kw">FROM</span> ventas
+    <span class="kw">WHERE</span> monto <span class="kw">IS NOT NULL</span>  <span class="cm">-- excluir montos nulos</span>
+),
+ventas_limpias <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> *,
+        <span class="kw">CASE WHEN</span> moneda = <span class="str">'USD'</span>
+             <span class="kw">THEN</span> monto * 3.72
+             <span class="kw">ELSE</span> monto
+        <span class="kw">END</span> <span class="kw">AS</span> monto_pen
+    <span class="kw">FROM</span> ventas_sin_dupes
+    <span class="kw">WHERE</span> rn = 1
+)
+<span class="kw">SELECT</span>
+    v.order_id,
+    <span class="fn">CONVERT</span>(<span class="kw">DATE</span>, v.fecha) <span class="kw">AS</span> fecha,
+    v.monto_pen,
+    v.estado,
+    <span class="cm">-- Normalizar segmento: primera letra mayúscula</span>
+    <span class="fn">UPPER</span>(<span class="fn">LEFT</span>(<span class="fn">LOWER</span>(<span class="fn">TRIM</span>(c.segmento)),1))
+      + <span class="fn">LOWER</span>(<span class="fn">SUBSTRING</span>(<span class="fn">TRIM</span>(c.segmento),2,100))
+      <span class="kw">AS</span> segmento,
+    <span class="fn">UPPER</span>(<span class="fn">LEFT</span>(<span class="fn">LOWER</span>(<span class="fn">TRIM</span>(c.ciudad)),1))
+      + <span class="fn">LOWER</span>(<span class="fn">SUBSTRING</span>(<span class="fn">TRIM</span>(c.ciudad),2,100))
+      <span class="kw">AS</span> ciudad,
+    <span class="fn">UPPER</span>(<span class="fn">LEFT</span>(<span class="fn">LOWER</span>(<span class="fn">TRIM</span>(p.categoria)),1))
+      + <span class="fn">LOWER</span>(<span class="fn">SUBSTRING</span>(<span class="fn">TRIM</span>(p.categoria),2,100))
+      <span class="kw">AS</span> categoria,
+    p.nombre <span class="kw">AS</span> producto
+<span class="kw">FROM</span> ventas_limpias v
+<span class="kw">LEFT JOIN</span> clientes  c <span class="kw">ON</span> v.cliente_id  = c.cliente_id
+<span class="kw">LEFT JOIN</span> productos p <span class="kw">ON</span> v.producto_id = p.producto_id;
+
+<span class="cm">-- PASO 3: KPIs por segmento con HAVING</span>
+<span class="kw">SELECT</span>
+    segmento,
+    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total_ordenes,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(monto_pen), 2)  <span class="kw">AS</span> revenue_pen,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(monto_pen), 2)  <span class="kw">AS</span> ticket_promedio,
+    <span class="fn">ROUND</span>(
+        <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> estado=<span class="str">'cancelado'</span> <span class="kw">THEN</span> 1.0 <span class="kw">ELSE</span> 0 <span class="kw">END</span>)*100.0
+        / <span class="fn">COUNT</span>(*), 1
+    ) <span class="kw">AS</span> pct_canceladas
+<span class="kw">FROM</span> novomart_analitica
+<span class="kw">GROUP BY</span> segmento
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > 1
+<span class="kw">ORDER BY</span> revenue_pen <span class="kw">DESC</span>;</div>
+    </div>
+
     <div id="l2-entregables" class="lab-content">
       <ul class="step-list">
-        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema2_ApellidoNombre.pdf — procedimiento + evidencias + 2 hallazgos + 2 limitaciones.</div></li>
-        <li><div class="step-n">🗄️</div><div><strong>SQL Server:</strong> script .sql con CREATE TABLE, cargas e INSERT, 2 JOINs y consultas de KPIs con resultados capturados.</div></li>
-        <li><div class="step-n">📊</div><div><strong>Power BI:</strong> .pbix con modelo estrella implementado + medidas DAX para los 3 KPIs.</div></li>
-        <li><div class="step-n">🗺️</div><div><strong>Diagrama:</strong> imagen del modelo estrella (diagrams.net) con hechos y dimensiones etiquetados.</div></li>
+        <li><div class="step-n">📄</div><div><strong>PDF:</strong> UAIN1008V_Tema2_ApellidoNombre.pdf — auditoría inicial + pasos de limpieza con capturas + 3 KPIs calculados + reflexión de 1-2 páginas sobre decisiones y su impacto numérico.</div></li>
+        <li><div class="step-n">🐍</div><div><strong>Python:</strong> notebook <code>.ipynb</code> ejecutado con todas las celdas, comentarios en cada paso y conclusiones en Markdown. Incluir celda de <code>pip install</code> al inicio.</div></li>
+        <li><div class="step-n">🗄️</div><div><strong>SQL (opcional):</strong> script <code>.sql</code> con verificación de integridad, CTE de limpieza y GROUP BY de KPIs. Capturas de resultados en SSMS o DBeaver.</div></li>
+        <li><div class="step-n">📊</div><div><strong>Tabla analítica:</strong> <code>novomart_analitica.csv</code> limpio y unificado, listo para cargar en Power BI en el Tema 3.</div></li>
+        <li><div class="step-n">🗺️</div><div><strong>Esquema estrella:</strong> diagrama de <code>fact_ventas</code> con dimensiones <code>dim_clientes</code>, <code>dim_productos</code> y <code>dim_tiempo</code>. Puede ser en diagrams.net, Lucidchart o fotografía clara de dibujo a mano.</div></li>
       </ul>
     </div>
   </div>
 
   <div class="dataset-card">
-    <div><div class="card-label">Dataset sugerido</div><h4>PNDA — Exportaciones Peruanas</h4><p>Datos de exportaciones peruanas con empresa, producto, valor FOB, país destino, fecha. Requiere integración de tablas de empresas y aranceles.</p><a href="https://www.gob.pe/datosabiertos" target="_blank">↗ gob.pe/datosabiertos</a></div>
-    <div><div class="card-label">Alternativa</div><h4>Global Superstore (multi-tabla)</h4><p>4 archivos relacionados: pedidos, devoluciones, clientes, personas. Diseñado para practicar JOINs múltiples y esquema estrella.</p><a href="https://www.kaggle.com/datasets/apoorvaappz/global-super-store-dataset" target="_blank">↗ Kaggle: Global Superstore</a></div>
-    <div><div class="card-label">Retos incluidos</div><p>→ IDs con formatos inconsistentes entre tablas</p><p>→ Fechas en texto sin formato estándar</p><p>→ Pedidos sin cliente registrado (invitados)</p><p>→ Devoluciones mezcladas con ventas normales</p></div>
+    <div>
+      <div class="card-label">Dataset del caso</div>
+      <h4>Novomart — tres CSV del curso</h4>
+      <p>Archivos del caso: <code>ventas_raw.csv</code> (20 transacciones Q1 2024), <code>clientes_raw.csv</code> (10 clientes) y <code>productos_raw.csv</code> (8 SKUs). Contienen intencionalmente todos los problemas reales de wrangling del sílabo.</p>
+      <a href="#" style="cursor:default;color:var(--muted)">↗ Descarga en el aula virtual (Blackboard)</a>
+    </div>
+    <div>
+      <div class="card-label">Dataset alternativo — fuente abierta real</div>
+      <h4>Online Retail II — UCI Machine Learning Repository</h4>
+      <p>1,067,371 transacciones reales de retail UK (2009-2011). Mismos problemas de Novomart a escala industrial: devoluciones mezcladas, CustomerIDs nulos, precios en cero, categorías inconsistentes.</p>
+      <a href="https://archive.ics.uci.edu/dataset/502/online+retail+ii" target="_blank">↗ UCI ML Repository — Online Retail II</a>
+    </div>
+    <div>
+      <div class="card-label">Problemas reales en Novomart</div>
+      <p>→ 3 formatos de fecha distintos en ventas_raw</p>
+      <p>→ 2 duplicados exactos (ORD-4528, ORD-4533)</p>
+      <p>→ 2 montos nulos sin justificación</p>
+      <p>→ 1 orden sin cliente registrado (ORD-4530)</p>
+      <p>→ 5 transacciones en USD mezcladas con PEN</p>
+      <p>→ Ciudades y categorías con variantes de mayúsculas</p>
+    </div>
   </div>
 
-  <div class="sec-label">Recursos</div>
+  <div class="sec-label">Recursos de alta calidad</div>
   <div class="res-grid">
-    <div class="res-card"><div class="res-type rt-pod">● Podcast</div><h5>DataCafé — "SQL en el mundo real de datos"</h5><a href="https://open.spotify.com/show/datacafe" target="_blank">Spotify → DataCafé Podcast</a><div class="res-use">Tarea: escuchar y mapear los problemas de integración mencionados al dataset del lab.</div></div>
-    <div class="res-card"><div class="res-type rt-yt">● YouTube</div><h5>Código Máquina — "pandas merge y join completo" (español)</h5><a href="https://www.youtube.com/@CodigoMaquina" target="_blank">youtube.com/@CodigoMaquina</a><div class="res-use">Antes del lab: ver para reforzar visualmente la diferencia entre INNER, LEFT y FULL JOIN con ejemplos.</div></div>
-    <div class="res-card"><div class="res-type rt-gh">● GitHub</div><h5>microsoft / powerbi-desktop-samples</h5><a href="https://github.com/microsoft/powerbi-desktop-samples" target="_blank">github.com/microsoft/powerbi-desktop-samples</a><div class="res-use">Tarea: revisar el ejemplo "Sales & Returns" para ver cómo se estructura un modelo estrella real en Power BI.</div></div>
+    <div class="res-card">
+      <div class="res-type rt-pod">● Podcast</div>
+      <h5>DataFramed (DataCamp) — "Data Wrangling Best Practices in Production"</h5>
+      <a href="https://www.datacamp.com/podcast" target="_blank">datacamp.com/podcast</a>
+      <div class="res-use">Tarea: escuchar el episodio sobre pipelines ETL en producción y mapear los 3 problemas de integración mencionados con los casos de Novomart.</div>
+    </div>
+    <div class="res-card">
+      <div class="res-type rt-yt">● YouTube</div>
+      <h5>Código Máquina — "pandas merge y join completo" (español)</h5>
+      <a href="https://www.youtube.com/@CodigoMaquina" target="_blank">youtube.com/@CodigoMaquina</a>
+      <div class="res-use">Antes del lab: ver para entender INNER vs LEFT vs FULL JOIN con ejemplos en pandas y el impacto de cada tipo en el conteo de filas resultante.</div>
+    </div>
+    <div class="res-card">
+      <div class="res-type rt-gh">● GitHub</div>
+      <h5>microsoft / powerbi-desktop-samples</h5>
+      <a href="https://github.com/microsoft/powerbi-desktop-samples" target="_blank">github.com/microsoft/powerbi-desktop-samples</a>
+      <div class="res-use">Tarea: revisar el ejemplo "Sales & Returns" para ver cómo se estructura un modelo estrella real en Power BI con fact table y dimensiones etiquetadas.</div>
+    </div>
   </div>
 
-  <div class="sec-label">Evaluación EP — Cuestionario Tema 2</div>
+  <div class="sec-label">Esquema estrella Novomart — modelo a diseñar en el lab</div>
+  <div class="card">
+    <div class="card-label">Diseño del modelo dimensional</div>
+    <div class="three-col" style="margin-top:16px;margin-bottom:0">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--accent3);letter-spacing:2px;margin-bottom:8px">DIM_CLIENTES</div>
+        <ul style="list-style:none;margin:0">
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--text)">cliente_id</strong> (PK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span>nombre</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span>ciudad_norm</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:none"><span style="position:absolute;left:0;color:var(--border2)">→</span>segmento_norm</li>
+        </ul>
+      </div>
+      <div style="background:rgba(77,166,255,.07);border:2px solid rgba(77,166,255,.3);border-radius:10px;padding:16px 18px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--info);letter-spacing:2px;margin-bottom:8px">FACT_VENTAS ⭐</div>
+        <ul style="list-style:none;margin:0">
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--text)">order_id</strong> (PK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--info)">cliente_id</strong> (FK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--info)">producto_id</strong> (FK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--info)">fecha_id</strong> (FK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span>monto_pen</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:none"><span style="position:absolute;left:0;color:var(--border2)">→</span>estado</li>
+        </ul>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--accent3);letter-spacing:2px;margin-bottom:8px">DIM_PRODUCTOS</div>
+        <ul style="list-style:none;margin:0">
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span><strong style="color:var(--text)">producto_id</strong> (PK)</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span>nombre</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:1px solid var(--border)"><span style="position:absolute;left:0;color:var(--border2)">→</span>categoria_norm</li>
+          <li style="font-size:.8rem;color:var(--muted);padding:3px 0 3px 14px;position:relative;border-bottom:none"><span style="position:absolute;left:0;color:var(--border2)">→</span>precio_base_pen</li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted)">
+      + <strong style="color:var(--accent3)">DIM_TIEMPO</strong>: fecha_id · anio · mes · trimestre · nombre_mes
+    </div>
+  </div>
+
+  <div class="sec-label">Evaluación EP — Cuestionario Tema 2 (3 intentos)</div>
   <div class="quiz-block">
     <div class="quiz-hdr">Tema 02 · 3 preguntas · Se considera la nota más alta de los 3 intentos</div>
-    <div class="quiz-q"><div class="qn">Q1</div><div class="qt"><strong>SQL — JOIN:</strong> Tienes pedidos (85,000 filas) y clientes (62,000 filas). INNER JOIN devuelve 58,000 filas; LEFT JOIN devuelve 85,000. ¿Qué explica la diferencia de 27,000 filas? ¿Qué JOIN usarías para calcular el revenue total de todos los pedidos y cuál para el LTV de clientes registrados? Justifica.</div></div>
-    <div class="quiz-q"><div class="qn">Q2</div><div class="qt"><strong>KPI:</strong> Calculas el ticket promedio como SUM(monto_total) / COUNT(*). Tu compañero calcula AVG(monto_total). Obtienes resultados diferentes. ¿Por qué? ¿Cuál es más correcto para reportar al gerente comercial? ¿En qué situación ambos serían idénticos?</div></div>
-    <div class="quiz-q"><div class="qn">Q3</div><div class="qt"><strong>Diseño:</strong> El equipo de ventas quiere analizar ingresos por región, categoría de producto, canal (online/tienda) y periodo mensual. Diseña el esquema estrella mínimo necesario: nombre las tablas de hechos y dimensiones, e indica qué columnas incluiría cada una.</div></div>
+    <div class="quiz-q">
+      <div class="qn">Q1</div>
+      <div class="qt">
+        <strong>JOIN y pérdida de datos:</strong> En el dataset de Novomart, ventas_raw tiene 20 registros y clientes_raw tiene 10. Un INNER JOIN devuelve 17 filas; un LEFT JOIN devuelve 18. ¿Qué explica exactamente la diferencia de 1 fila? ¿Qué JOIN usarías para calcular el revenue total de todas las órdenes del Q1 y cuál para analizar el comportamiento exclusivo de clientes registrados? Justifica con el caso concreto de ORD-4530.
+      </div>
+    </div>
+    <div class="quiz-q">
+      <div class="qn">Q2</div>
+      <div class="qt">
+        <strong>Decisión de wrangling con impacto en KPI:</strong> Las órdenes ORD-4529 y ORD-4536 tienen monto nulo. Si las excluyes, el revenue baja. Si las imputas con el precio_base del producto, podrías sobreestimar. Describe los pros y contras de cada decisión y cómo la documentarías en el diccionario de datos para que el gerente comercial de Novomart entienda el supuesto aplicado.
+      </div>
+    </div>
+    <div class="quiz-q">
+      <div class="qn">Q3</div>
+      <div class="qt">
+        <strong>Esquema estrella y KPI:</strong> El gerente quiere analizar el revenue por segmento de cliente, categoría de producto, ciudad y mes. Diseña el esquema estrella mínimo: nombra las tablas de hechos y dimensiones, indica qué columnas incluiría cada una, y explica por qué separar clientes de ventas en el modelo dimensional evita el error del BCP (morosidad duplicada por desnormalización).
+      </div>
+    </div>
   </div>
+
+
 </div>
 
 <!-- ═══════════════════ TEMA 3 ═══════════════════ -->
@@ -1581,6 +1873,7 @@ meta = {
   </div>
 </div>
 
+
 </div><!-- /course-body -->
 
 <script>
@@ -1618,5 +1911,8 @@ function switchTab(el, labId, tabName) {
   if (target) target.classList.add('active');
 }
 </script>
+</body>
+</html>
+
 </body>
 </html>
